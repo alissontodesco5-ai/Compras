@@ -329,6 +329,55 @@
   input[type="number"] {
     -moz-appearance: textfield;
   }
+  .combo-wrap {
+    position: relative;
+    width: 100%;
+  }
+  .combo-wrap input {
+    padding-right: 34px;
+  }
+  .combo-arrow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 34px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  .combo-dropdown {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 4px);
+    max-height: 220px;
+    overflow-y: auto;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    z-index: 30;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+  }
+  .combo-dropdown.open { display: block; }
+  .combo-dropdown .combo-option {
+    padding: 10px 12px;
+    font-size: 0.9375rem;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .combo-dropdown .combo-option:hover,
+  .combo-dropdown .combo-option.active {
+    background: var(--accent-dark);
+  }
+  .combo-dropdown .combo-empty {
+    padding: 10px 12px;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
   .input-prefix {
     position: relative;
     width: 100%;
@@ -626,8 +675,12 @@
 
   <div class="form-card">
     <div class="form-row">
-      <input type="text" id="inputItem" list="datalistItens" placeholder="Item (ex: Arroz)">
-      <datalist id="datalistItens"></datalist>
+      <div class="combo-wrap">
+        <input type="text" id="inputItem" placeholder="Item (ex: Arroz)" autocomplete="off"
+          onclick="abrirDropdownItens()" oninput="filtrarDropdownItens()" onfocus="abrirDropdownItens()">
+        <button type="button" class="combo-arrow" onclick="abrirDropdownItens()" tabindex="-1">▾</button>
+        <div class="combo-dropdown" id="dropdownItens"></div>
+      </div>
     </div>
     <div class="form-row">
       <input type="number" id="inputQtd" placeholder="Qtd" min="1" value="1">
@@ -1280,9 +1333,42 @@
   }
 
   function popularDatalists() {
-    const nomes = [...ITENS_PADRAO, ...itensExtra].sort((a, b) => a.localeCompare(b, 'pt-BR'));
-    document.getElementById('datalistItens').innerHTML = nomes.map(n => `<option value="${escapeHtml(n)}">`).join('');
+    // catálogo mantido em memória; o dropdown lê ITENS_PADRAO/itensExtra diretamente
   }
+
+  function listaCatalogoOrdenada() {
+    return [...ITENS_PADRAO, ...itensExtra].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  }
+
+  function filtrarDropdownItens() {
+    const termo = document.getElementById('inputItem').value.trim().toLowerCase();
+    const nomes = listaCatalogoOrdenada().filter(n => !termo || n.toLowerCase().includes(termo));
+    const dropdown = document.getElementById('dropdownItens');
+
+    dropdown.innerHTML = nomes.length
+      ? nomes.map(n => `<div class="combo-option" onmousedown="event.preventDefault(); selecionarItemDropdown('${n.replace(/'/g, "\\'")}')">${escapeHtml(n)}</div>`).join('')
+      : `<div class="combo-empty">Nenhum produto encontrado — pode digitar um novo</div>`;
+  }
+
+  function abrirDropdownItens() {
+    filtrarDropdownItens();
+    document.getElementById('dropdownItens').classList.add('open');
+  }
+
+  function fecharDropdownItens() {
+    document.getElementById('dropdownItens').classList.remove('open');
+  }
+
+  function selecionarItemDropdown(nome) {
+    document.getElementById('inputItem').value = nome;
+    fecharDropdownItens();
+    document.getElementById('inputQtd').focus();
+  }
+
+  document.addEventListener('click', (event) => {
+    const wrap = event.target.closest('.combo-wrap');
+    if (!wrap) fecharDropdownItens();
+  });
 
   popularDatalists();
   aplicarCorSistema(corSistemaAtual, false);
