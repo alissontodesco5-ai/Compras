@@ -701,14 +701,17 @@
 
 <footer class="total-footer" id="footerTotal" style="display:none">
   <div class="footer-inner footer-boxes">
+    <div class="total-box budget-box" onclick="abrirModalOrcamento()">
+      <span class="label">Orçamento</span>
+      <span id="orcamentoValor">Definir</span>
+    </div>
     <div class="total-box">
       <span class="label">Total da compra</span>
       <span id="totalGeral">R$ 0,00</span>
     </div>
-    <div class="total-box budget-box" onclick="abrirModalOrcamento()">
-      <span class="label">Orçamento</span>
-      <span id="orcamentoValor">Definir</span>
-      <div class="budget-sub" id="orcamentoSub"></div>
+    <div class="total-box" id="restanteBox" style="display:none">
+      <span class="label" id="restanteLabel">Restante</span>
+      <span id="restanteValor">R$ 0,00</span>
     </div>
   </div>
 </footer>
@@ -1182,18 +1185,21 @@
 
   function renderizarOrcamento(lst, gasto) {
     const valorEl = document.getElementById('orcamentoValor');
-    const subEl = document.getElementById('orcamentoSub');
+    const restanteBox = document.getElementById('restanteBox');
+    const restanteLabel = document.getElementById('restanteLabel');
+    const restanteValor = document.getElementById('restanteValor');
     const orcamento = lst.orcamento;
     if (orcamento === null || orcamento === undefined) {
       valorEl.textContent = 'Definir';
-      subEl.innerHTML = '';
-      subEl.style.color = '';
+      restanteBox.style.display = 'none';
       return;
     }
     const restante = orcamento - gasto;
     valorEl.textContent = formatarMoeda(orcamento);
-    subEl.innerHTML = `Gasto: ${formatarMoeda(gasto)}<br>${restante >= 0 ? 'Restante' : 'Excedido'}: ${formatarMoeda(Math.abs(restante))}`;
-    subEl.style.color = restante < 0 ? 'var(--danger)' : '';
+    restanteBox.style.display = '';
+    restanteLabel.textContent = restante >= 0 ? 'Restante' : 'Excedido';
+    restanteValor.textContent = formatarMoeda(Math.abs(restante));
+    restanteValor.style.color = restante < 0 ? 'var(--danger)' : '';
   }
 
   function renderizar() {
