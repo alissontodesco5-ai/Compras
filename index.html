@@ -234,6 +234,22 @@
     background: var(--accent);
     color: #063a1e;
   }
+  .btn-install {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    margin-bottom: 12px;
+    display: none;
+  }
+  .modal-box p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0 0 4px 0;
+  }
+  .modal-box p b {
+    color: var(--text);
+  }
 </style>
 </head>
 <body>
@@ -247,6 +263,8 @@
 </header>
 
 <div class="container">
+
+  <button class="btn-install" id="btnInstalar" onclick="instalarApp()">📲 Instalar App</button>
 
   <div class="form-card">
     <div class="form-row">
@@ -278,6 +296,18 @@
     <div class="modal-actions">
       <button class="btn-cancel" onclick="fecharModalPreco()">Cancelar</button>
       <button class="btn-confirm" onclick="confirmarModalPreco()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalInstalarIOS" onclick="if(event.target===this) fecharModalInstalarIOS()">
+  <div class="modal-box">
+    <h3>📲 Instalar no iPhone</h3>
+    <p>1. Toque no botão de <b>compartilhar</b> (□↑) na barra do Safari</p>
+    <p>2. Escolha <b>"Adicionar à Tela de Início"</b></p>
+    <p>3. Toque em <b>"Adicionar"</b></p>
+    <div class="modal-actions">
+      <button class="btn-confirm" onclick="fecharModalInstalarIOS()" style="width:100%">Entendi</button>
     </div>
   </div>
 </div>
@@ -451,6 +481,60 @@
       navigator.serviceWorker.register('service-worker.js').catch(() => {});
     });
   }
+
+  // Botão de instalar como app
+  let deferredInstallPrompt = null;
+
+  function appJaInstalado() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+
+  function ehIOS() {
+    return /iphone|ipad|ipod/i.test(navigator.userAgent);
+  }
+
+  function atualizarBotaoInstalar() {
+    const btn = document.getElementById('btnInstalar');
+    if (!btn) return;
+    if (appJaInstalado()) {
+      btn.style.display = 'none';
+    } else if (deferredInstallPrompt || ehIOS()) {
+      btn.style.display = 'block';
+    } else {
+      btn.style.display = 'none';
+    }
+  }
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    atualizarBotaoInstalar();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    atualizarBotaoInstalar();
+  });
+
+  function instalarApp() {
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      deferredInstallPrompt.userChoice.finally(() => {
+        deferredInstallPrompt = null;
+        atualizarBotaoInstalar();
+      });
+    } else if (ehIOS()) {
+      document.getElementById('modalInstalarIOS').classList.add('open');
+    } else {
+      alert('Para instalar, use o menu do seu navegador e escolha "Adicionar à tela de início" ou "Instalar app".');
+    }
+  }
+
+  function fecharModalInstalarIOS() {
+    document.getElementById('modalInstalarIOS').classList.remove('open');
+  }
+
+  atualizarBotaoInstalar();
 </script>
 
 </body>
