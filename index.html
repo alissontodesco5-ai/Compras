@@ -133,6 +133,32 @@
   .bottom-nav button.active {
     color: var(--accent);
   }
+  .bottom-nav button.tem-atualizacao {
+    color: var(--accent);
+    animation: sino-pulsar 1.2s ease-in-out infinite;
+  }
+  .bell-wrap {
+    position: relative;
+    display: inline-flex;
+  }
+  .bell-dot {
+    display: none;
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--danger);
+    border: 2px solid var(--card);
+  }
+  .bottom-nav button.tem-atualizacao .bell-dot {
+    display: block;
+  }
+  @keyframes sino-pulsar {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
   .footer-inner {
     max-width: 600px;
     margin: 0 auto;
@@ -763,6 +789,13 @@
   <button id="navBtnListas" onclick="mostrarListas()">
     <svg viewBox="0 0 24 24"><path d="M4 5h16v2H4V5zm0 6h16v2H4v-2zm0 6h16v2H4v-2z"/></svg>
     Listas
+  </button>
+  <button id="navBtnAtualizacao" onclick="clicarSinoAtualizacao()" style="display:none">
+    <span class="bell-wrap">
+      <svg viewBox="0 0 24 24"><path d="M12 2a1 1 0 0 1 1 1v1.06A7 7 0 0 1 19 11v4l1.7 2.55a1 1 0 0 1-.83 1.45H4.13a1 1 0 0 1-.83-1.45L5 15v-4a7 7 0 0 1 6-6.94V3a1 1 0 0 1 1-1zm0 20a2.5 2.5 0 0 1-2.45-2h4.9A2.5 2.5 0 0 1 12 22z"/></svg>
+      <span class="bell-dot" id="sinoAtualizacaoDot"></span>
+    </span>
+    Atualização
   </button>
   <button id="navBtnConfig" onclick="mostrarConfig()">
     <svg viewBox="0 0 24 24"><path d="M19.14 12.94a7.14 7.14 0 0 0 .06-.94 7.14 7.14 0 0 0-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.3 7.3 0 0 0-1.63-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.14.56-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.7 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.04.3-.06.62-.06.94s.02.64.06.94L2.82 14.5a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96c.49.38 1.04.7 1.63.94l.36 2.54a.5.5 0 0 0 .5.42h3.84a.5.5 0 0 0 .5-.42l.36-2.54c.59-.24 1.14-.56 1.63-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/></svg>
@@ -1474,6 +1507,21 @@
   definirTamanhoFonte(tamanhoFonteAtual, false);
   mostrarListas();
 
+  function marcarAtualizacaoDisponivel() {
+    document.getElementById('navBtnAtualizacao').style.display = '';
+    document.getElementById('navBtnAtualizacao').classList.add('tem-atualizacao');
+  }
+
+  function perguntarAtualizacao() {
+    mostrarConfirmacao('Uma nova atualização do app está disponível. Deseja atualizar agora?', () => {
+      window.location.reload();
+    });
+  }
+
+  function clicarSinoAtualizacao() {
+    perguntarAtualizacao();
+  }
+
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('service-worker.js').then((reg) => {
@@ -1482,9 +1530,8 @@
           if (!novoWorker) return;
           novoWorker.addEventListener('statechange', () => {
             if (novoWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              mostrarConfirmacao('Uma nova atualização do app está disponível. Deseja atualizar agora?', () => {
-                window.location.reload();
-              });
+              marcarAtualizacaoDisponivel();
+              perguntarAtualizacao();
             }
           });
         });
