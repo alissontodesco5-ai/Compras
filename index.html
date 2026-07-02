@@ -626,7 +626,8 @@
 
   <div class="form-card">
     <div class="form-row">
-      <input type="text" id="inputItem" placeholder="Item (ex: Arroz)">
+      <input type="text" id="inputItem" list="datalistItens" placeholder="Item (ex: Arroz)">
+      <datalist id="datalistItens"></datalist>
     </div>
     <div class="form-row">
       <input type="number" id="inputQtd" placeholder="Qtd" min="1" value="1">
@@ -806,6 +807,32 @@
   const STORAGE_KEY_LISTAS = 'lista-de-compras-listas';
   const STORAGE_KEY_ATUAL = 'lista-de-compras-lista-atual';
   const STORAGE_KEY_LEGADO = 'lista-de-compras-dados';
+  const STORAGE_KEY_ITENS_EXTRA = 'lista-de-compras-itens-extra';
+
+  const CATALOGO_PADRAO = {
+    'Higiene e Cuidados Pessoais': ['Sabonete', 'Sabonete líquido', 'Shampoo', 'Condicionador', 'Creme dental', 'Enxaguante bucal', 'Fio dental', 'Desodorante', 'Algodão', 'Hastes flexíveis', 'Protetor solar', 'Hidratante corporal', 'Aparelho de barbear', 'Creme de barbear'],
+    'Limpeza da Casa e Lavanderia': ['Detergente', 'Sabão em pó', 'Sabão líquido para roupas', 'Amaciante', 'Tira-manchas', 'Sabão em barra', 'Sabão para máquina de lavar louça', 'Secante para máquina de lavar louça', 'Desengordurante', 'Limpador de vidros', 'Limpador multiuso', 'Desinfetante', 'Água sanitária', 'Álcool em gel', 'Esponja de pia', 'Esponja de aço', 'Pano multiuso', 'Luvas de limpeza', 'Saco de lixo'],
+    'Mercearia e Despensa': ['Arroz', 'Feijão', 'Açúcar', 'Café', 'Sal', 'Azeite de oliva', 'Óleo de cozinha', 'Macarrão', 'Molho de tomate', 'Farinha de trigo', 'Fermento em pó', 'Maionese', 'Ketchup', 'Mostarda', 'Vinagre', 'Pimenta-do-reino', 'Orégano', 'Achocolatado', 'Cereal matinal', 'Biscoito recheado', 'Biscoito água e sal', 'Torradas', 'Geléia', 'Farinha de mandioca', 'Farofa pronta', 'Milho de pipoca', 'Atum em lata', 'Sardinha em lata', 'Milho verde', 'Ervilha', 'Creme de leite', 'Leite condensado', 'Gelatina', 'Chá'],
+    'Laticínios e Frios': ['Leite', 'Manteiga', 'Margarina', 'Requeijão', 'Queijo', 'Presunto', 'Iogurte', 'Linguiça', 'Salsicha', 'Bacon'],
+    'Açougue': ['Carne moída', 'Bife bovino', 'Peito de frango'],
+    'Hortifruti': ['Alface', 'Tomate', 'Cebola', 'Alho', 'Batata', 'Banana', 'Maçã', 'Laranja'],
+    'Padaria': ['Pão de forma', 'Pão francês'],
+    'Bebidas': ['Água mineral', 'Suco', 'Refrigerante', 'Cerveja', 'Vinho'],
+    'Outros': ['Papel higiênico']
+  };
+
+  const ITENS_PADRAO = Object.values(CATALOGO_PADRAO).flat();
+
+  let itensExtra = JSON.parse(localStorage.getItem(STORAGE_KEY_ITENS_EXTRA) || '[]');
+
+  function registrarItemNoCatalogo(nome) {
+    const jaExiste = ITENS_PADRAO.some(n => n.toLowerCase() === nome.toLowerCase()) ||
+      itensExtra.some(n => n.toLowerCase() === nome.toLowerCase());
+    if (jaExiste) return;
+    itensExtra.push(nome);
+    localStorage.setItem(STORAGE_KEY_ITENS_EXTRA, JSON.stringify(itensExtra));
+    popularDatalists();
+  }
 
   let listas = JSON.parse(localStorage.getItem(STORAGE_KEY_LISTAS) || 'null');
 
@@ -1071,6 +1098,7 @@
       comprado: false
     });
 
+    registrarItemNoCatalogo(nome);
     salvar();
     renderizar();
 
@@ -1251,6 +1279,12 @@
     return div.innerHTML;
   }
 
+  function popularDatalists() {
+    const nomes = [...ITENS_PADRAO, ...itensExtra].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+    document.getElementById('datalistItens').innerHTML = nomes.map(n => `<option value="${escapeHtml(n)}">`).join('');
+  }
+
+  popularDatalists();
   aplicarCorSistema(corSistemaAtual, false);
   definirTamanhoFonte(tamanhoFonteAtual, false);
   mostrarListas();
