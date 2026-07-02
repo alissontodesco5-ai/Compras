@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lista-de-compras-v15';
+const CACHE_NAME = 'lista-de-compras-v16';
 const ASSETS = [
   './index.html',
   './manifest.json',
@@ -29,6 +29,17 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).then((response) => {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        return response;
+      }).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((cached) => {
       return cached || fetch(event.request).then((response) => {
