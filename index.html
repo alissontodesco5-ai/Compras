@@ -151,6 +151,25 @@
     font-weight: normal;
     opacity: 0.85;
   }
+  .footer-boxes {
+    display: flex;
+    gap: 8px;
+  }
+  .footer-boxes .total-box {
+    flex: 1;
+    min-width: 0;
+    font-size: 1.0625rem;
+  }
+  .budget-box {
+    cursor: pointer;
+  }
+  .budget-sub {
+    font-size: 0.6875rem;
+    font-weight: normal;
+    opacity: 0.85;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
   .btn-add-list-full {
     width: 100%;
     background: var(--accent);
@@ -681,10 +700,15 @@
 </nav>
 
 <footer class="total-footer" id="footerTotal" style="display:none">
-  <div class="footer-inner">
+  <div class="footer-inner footer-boxes">
     <div class="total-box">
       <span class="label">Total da compra</span>
       <span id="totalGeral">R$ 0,00</span>
+    </div>
+    <div class="total-box budget-box" onclick="abrirModalOrcamento()">
+      <span class="label">Orçamento</span>
+      <span id="orcamentoValor">Definir</span>
+      <div class="budget-sub" id="orcamentoSub"></div>
     </div>
   </div>
 </footer>
@@ -699,6 +723,20 @@
     <div class="modal-actions">
       <button class="btn-cancel" onclick="fecharModalPreco()">Cancelar</button>
       <button class="btn-confirm" onclick="confirmarModalPreco()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOrcamento" onclick="if(event.target===this) fecharModalOrcamento()">
+  <div class="modal-box">
+    <h3>Orçamento da lista</h3>
+    <div class="input-prefix">
+      <span>R$</span>
+      <input type="number" id="inputOrcamento" placeholder="0,00" step="0.01" min="0" inputmode="decimal" onkeydown="if(event.key==='Enter') confirmarOrcamento()">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModalOrcamento()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmarOrcamento()">Salvar</button>
     </div>
   </div>
 </div>
@@ -967,7 +1005,7 @@
   function confirmarNovaLista() {
     const nomeInput = document.getElementById('inputNovaLista').value.trim();
     const nome = nomeInput || `Lista ${listas.length + 1}`;
-    const nova = { id: Date.now(), nome, itens: [] };
+    const nova = { id: Date.now(), nome, itens: [], orcamento: null };
     listas.push(nova);
     salvar();
     fecharModalNovaLista();
@@ -1121,14 +1159,53 @@
     }
   }
 
+  function abrirModalOrcamento() {
+    const lst = listaAtual();
+    const input = document.getElementById('inputOrcamento');
+    input.value = (lst.orcamento !== null && lst.orcamento !== undefined) ? lst.orcamento : '';
+    document.getElementById('modalOrcamento').classList.add('open');
+    setTimeout(() => input.focus(), 50);
+  }
+
+  function fecharModalOrcamento() {
+    document.getElementById('modalOrcamento').classList.remove('open');
+  }
+
+  function confirmarOrcamento() {
+    const valor = document.getElementById('inputOrcamento').value;
+    const num = parseFloat(String(valor).replace(',', '.'));
+    listaAtual().orcamento = (valor === '' || isNaN(num)) ? null : num;
+    salvar();
+    renderizar();
+    fecharModalOrcamento();
+  }
+
+  function renderizarOrcamento(lst, gasto) {
+    const valorEl = document.getElementById('orcamentoValor');
+    const subEl = document.getElementById('orcamentoSub');
+    const orcamento = lst.orcamento;
+    if (orcamento === null || orcamento === undefined) {
+      valorEl.textContent = 'Definir';
+      subEl.innerHTML = '';
+      subEl.style.color = '';
+      return;
+    }
+    const restante = orcamento - gasto;
+    valorEl.textContent = formatarMoeda(orcamento);
+    subEl.innerHTML = `Gasto: ${formatarMoeda(gasto)}<br>${restante >= 0 ? 'Restante' : 'Excedido'}: ${formatarMoeda(Math.abs(restante))}`;
+    subEl.style.color = restante < 0 ? 'var(--danger)' : '';
+  }
+
   function renderizar() {
     const lst = listaAtual();
     const lista = document.getElementById('listaItens');
     let total = 0;
+    let gasto = 0;
 
     if (lst.itens.length === 0) {
       lista.innerHTML = '';
       document.getElementById('totalGeral').textContent = formatarMoeda(0);
+      renderizarOrcamento(lst, 0);
       return;
     }
 
@@ -1136,6 +1213,7 @@
       const temPreco = item.preco !== null && item.preco !== undefined;
       const subtotal = temPreco ? item.qtd * item.preco : 0;
       total += subtotal;
+      if (item.comprado) gasto += subtotal;
       const metaParts = [];
       if (item.qtd) metaParts.push(`Qtd: ${item.qtd}`);
       if (item.espec) metaParts.push(item.espec);
@@ -1158,6 +1236,7 @@
     }).join('');
 
     document.getElementById('totalGeral').textContent = formatarMoeda(total);
+    renderizarOrcamento(lst, gasto);
   }
 
   function escapeHtml(str) {
