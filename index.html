@@ -69,7 +69,7 @@
     background: var(--bg-gradient);
     background-attachment: fixed;
     color: var(--text);
-    padding-bottom: 100px;
+    padding-bottom: 150px;
     min-height: 100vh;
   }
   header {
@@ -83,7 +83,7 @@
   }
   header h1 {
     margin: 0;
-    font-size: 20px;
+    font-size: 1.25rem;
   }
   .header-inner {
     max-width: 600px;
@@ -93,11 +93,45 @@
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 64px;
     z-index: 10;
     background: linear-gradient(135deg, var(--accent-dark), var(--accent));
-    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    padding: 12px 16px;
     box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+  }
+  .bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    display: flex;
+    min-height: 64px;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .bottom-nav button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 10px 4px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .bottom-nav button svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+  }
+  .bottom-nav button.active {
+    color: var(--accent);
   }
   .footer-inner {
     max-width: 600px;
@@ -107,15 +141,138 @@
     background: rgba(0,0,0,0.25);
     border-radius: 10px;
     padding: 10px;
-    font-size: 22px;
+    font-size: 1.375rem;
     font-weight: bold;
     text-align: center;
   }
   .total-box span.label {
     display: block;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: normal;
     opacity: 0.85;
+  }
+  .btn-add-list-full {
+    width: 100%;
+    background: var(--accent);
+    color: var(--btn-text-on-accent);
+    margin-bottom: 16px;
+  }
+  .lists-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .list-card {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .list-card-body {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 14px 16px;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .list-card-name {
+    font-size: 1rem;
+    font-weight: 700;
+    word-break: break-word;
+  }
+  .list-card-meta {
+    font-size: 0.8125rem;
+    color: var(--muted);
+    font-weight: normal;
+  }
+  .list-card-action {
+    flex: 0 0 auto;
+    width: 44px;
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--border);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .list-card-action.danger {
+    color: var(--danger);
+  }
+  .list-card-action svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+  .list-card-action img {
+    width: 16px;
+    height: 16px;
+  }
+  .empty-lists {
+    text-align: center;
+    color: var(--muted);
+    padding: 30px 10px;
+  }
+  .btn-back {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    padding: 4px 0 12px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .lista-titulo {
+    margin: 0 0 12px 0;
+    font-size: 1.1875rem;
+  }
+  .config-label {
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .color-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .color-swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    padding: 0;
+  }
+  .color-swatch.active {
+    border-color: var(--text);
+  }
+  .font-size-options {
+    display: flex;
+    gap: 8px;
+  }
+  .btn-font-size {
+    flex: 1;
+    background: var(--btn-secondary-bg);
+    color: var(--text);
+  }
+  .btn-font-size.active {
+    background: var(--accent);
+    color: var(--btn-text-on-accent);
+  }
+  .btn-font-size svg {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 6px;
+    fill: currentColor;
   }
   .container {
     max-width: 600px;
@@ -142,7 +299,7 @@
     border: 1px solid var(--border);
     background: var(--input-bg);
     color: var(--text);
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
   input::placeholder { color: var(--muted); }
   input[type="number"]::-webkit-outer-spin-button,
@@ -163,7 +320,7 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--muted);
-    font-size: 15px;
+    font-size: 0.9375rem;
     pointer-events: none;
   }
   .input-prefix input {
@@ -181,39 +338,11 @@
     height: 24px;
     margin-right: 8px;
   }
-  .header-inner {
-    position: relative;
-  }
-  .btn-theme {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.2);
-    border: none;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  .btn-theme svg {
-    width: 20px;
-    height: 20px;
-    fill: var(--text);
-  }
-  .btn-theme .icon-sun { display: none; }
-  .btn-theme .icon-moon { display: block; }
-  [data-theme="light"] .btn-theme .icon-sun { display: block; }
-  [data-theme="light"] .btn-theme .icon-moon { display: none; }
   button {
     cursor: pointer;
     border: none;
     border-radius: 8px;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 600;
     padding: 12px;
   }
@@ -293,14 +422,14 @@
     gap: 8px 12px;
   }
   .item-name {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
     word-break: break-word;
     flex: 1 1 auto;
     min-width: 80px;
   }
   .item-meta {
-    font-size: 13px;
+    font-size: 0.8125rem;
     color: var(--muted);
     display: flex;
     flex-wrap: wrap;
@@ -313,7 +442,7 @@
     border-radius: 6px;
   }
   .item-price {
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: bold;
     color: var(--accent);
     cursor: pointer;
@@ -332,7 +461,7 @@
   .btn-del {
     background: transparent;
     color: var(--danger);
-    font-size: 20px;
+    font-size: 1.25rem;
     padding: 4px 8px;
     flex-shrink: 0;
   }
@@ -369,11 +498,15 @@
   }
   .modal-box h3 {
     margin: 0 0 14px 0;
-    font-size: 17px;
+    font-size: 1.0625rem;
   }
   .modal-box input {
-    font-size: 18px;
+    font-size: 1.125rem;
     text-align: center;
+  }
+  .modal-box input.text-left {
+    text-align: left;
+    font-size: 1rem;
   }
   .modal-actions {
     display: flex;
@@ -398,14 +531,32 @@
     margin-bottom: 12px;
     display: none;
   }
+  .btn-update {
+    width: 100%;
+    background: var(--btn-secondary-bg);
+    color: var(--text);
+  }
+  .btn-update svg {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    margin-right: 6px;
+    margin-top: -2px;
+    fill: currentColor;
+  }
   .modal-box p {
     color: var(--muted);
-    font-size: 14px;
+    font-size: 0.875rem;
     line-height: 1.7;
     margin: 0 0 4px 0;
   }
   .modal-box p b {
     color: var(--text);
+  }
+  .modal-box p.modal-msg {
+    color: var(--text);
+    font-size: 0.9375rem;
+    line-height: 1.6;
   }
 
   /* Telas largas (computador) */
@@ -428,7 +579,7 @@
       max-width: 100%;
     }
     .item-name {
-      font-size: 17px;
+      font-size: 1.0625rem;
     }
   }
 </style>
@@ -438,16 +589,21 @@
 <header>
   <div class="header-inner">
     <h1><img class="btn-icon" src="icons/ui/carrinho.png" alt=""> Lista de Compras</h1>
-    <button class="btn-theme" onclick="alternarTema()" aria-label="Alternar tema claro/escuro">
-      <svg class="icon-sun" viewBox="0 0 24 24"><path d="M12 4a1 1 0 0 1-1-1V2a1 1 0 1 1 2 0v1a1 1 0 0 1-1 1zm0 16a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zm10-8a1 1 0 0 1-1 1h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zM4 12a1 1 0 0 1-1 1H2a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zm14.36 6.36a1 1 0 0 1-1.41 0l-.71-.71a1 1 0 1 1 1.41-1.41l.71.71a1 1 0 0 1 0 1.41zM7.05 7.76a1 1 0 0 1-1.41 0l-.71-.71A1 1 0 1 1 6.34 5.64l.71.71a1 1 0 0 1 0 1.41zm11.31-1.41a1 1 0 0 1 0 1.41l-.71.71a1 1 0 1 1-1.41-1.41l.71-.71a1 1 0 0 1 1.41 0zM6.34 18.36a1 1 0 0 1 0-1.41l.71-.71a1 1 0 1 1 1.41 1.41l-.71.71a1 1 0 0 1-1.41 0zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/></svg>
-      <svg class="icon-moon" viewBox="0 0 24 24"><path d="M12.3 2a1 1 0 0 1 .95 1.34A8 8 0 0 0 20.66 13a1 1 0 0 1 1.14 1.3A10 10 0 1 1 11.7 2.66 1 1 0 0 1 12.3 2z"/></svg>
-    </button>
   </div>
 </header>
 
-<div class="container">
+<div id="viewListas" class="container">
+  <button class="btn-add-list-full" onclick="abrirModalNovaLista()">+ Nova lista</button>
+  <div class="lists-grid" id="listsGrid"></div>
+</div>
 
-  <button class="btn-install" id="btnInstalar" onclick="instalarApp()"><img class="btn-icon" src="icons/ui/download.png" alt=""> Instalar App</button>
+<div id="viewLista" class="container" style="display:none">
+
+  <button class="btn-back" onclick="voltarParaListas()">
+    <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M15.4 4.6 8 12l7.4 7.4-1.4 1.4L5.2 12l8.8-8.8z"/></svg>
+    Voltar para listas
+  </button>
+  <h2 class="lista-titulo" id="listaTitulo"></h2>
 
   <div class="form-card">
     <div class="form-row">
@@ -475,7 +631,56 @@
 
 </div>
 
-<footer class="total-footer">
+<div id="viewConfig" class="container" style="display:none">
+  <h2 class="lista-titulo">Configurações</h2>
+
+  <div class="form-card">
+    <div class="config-label">Tema</div>
+    <div class="font-size-options" id="temaOptions">
+      <button class="btn-font-size" data-tema="light" onclick="definirTema('light')">
+        <svg viewBox="0 0 24 24"><path d="M12 4a1 1 0 0 1-1-1V2a1 1 0 1 1 2 0v1a1 1 0 0 1-1 1zm0 16a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zm10-8a1 1 0 0 1-1 1h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zM4 12a1 1 0 0 1-1 1H2a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zm14.36 6.36a1 1 0 0 1-1.41 0l-.71-.71a1 1 0 1 1 1.41-1.41l.71.71a1 1 0 0 1 0 1.41zM7.05 7.76a1 1 0 0 1-1.41 0l-.71-.71A1 1 0 1 1 6.34 5.64l.71.71a1 1 0 0 1 0 1.41zm11.31-1.41a1 1 0 0 1 0 1.41l-.71.71a1 1 0 1 1-1.41-1.41l.71-.71a1 1 0 0 1 1.41 0zM6.34 18.36a1 1 0 0 1 0-1.41l.71-.71a1 1 0 1 1 1.41 1.41l-.71.71a1 1 0 0 1-1.41 0zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/></svg>
+        Claro
+      </button>
+      <button class="btn-font-size" data-tema="dark" onclick="definirTema('dark')">
+        <svg viewBox="0 0 24 24"><path d="M12.3 2a1 1 0 0 1 .95 1.34A8 8 0 0 0 20.66 13a1 1 0 0 1 1.14 1.3A10 10 0 1 1 11.7 2.66 1 1 0 0 1 12.3 2z"/></svg>
+        Escuro
+      </button>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="config-label">Cor do sistema</div>
+    <div class="color-swatches" id="colorSwatches"></div>
+  </div>
+
+  <div class="form-card">
+    <div class="config-label">Tamanho da fonte</div>
+    <div class="font-size-options" id="fontSizeOptions">
+      <button class="btn-font-size" data-tamanho="pequeno" onclick="definirTamanhoFonte('pequeno')">A-</button>
+      <button class="btn-font-size" data-tamanho="medio" onclick="definirTamanhoFonte('medio')">A</button>
+      <button class="btn-font-size" data-tamanho="grande" onclick="definirTamanhoFonte('grande')">A+</button>
+    </div>
+  </div>
+
+  <button class="btn-install" id="btnInstalar" onclick="instalarApp()"><img class="btn-icon" src="icons/ui/download.png" alt=""> Instalar App</button>
+  <button class="btn-update" id="btnAtualizar" onclick="atualizarSistema()">
+    <svg viewBox="0 0 24 24"><path d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
+    Atualizar sistema
+  </button>
+</div>
+
+<nav class="bottom-nav">
+  <button id="navBtnListas" onclick="mostrarListas()">
+    <svg viewBox="0 0 24 24"><path d="M4 5h16v2H4V5zm0 6h16v2H4v-2zm0 6h16v2H4v-2z"/></svg>
+    Listas
+  </button>
+  <button id="navBtnConfig" onclick="mostrarConfig()">
+    <svg viewBox="0 0 24 24"><path d="M19.14 12.94a7.14 7.14 0 0 0 .06-.94 7.14 7.14 0 0 0-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.3 7.3 0 0 0-1.63-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.14.56-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.7 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.04.3-.06.62-.06.94s.02.64.06.94L2.82 14.5a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96c.49.38 1.04.7 1.63.94l.36 2.54a.5.5 0 0 0 .5.42h3.84a.5.5 0 0 0 .5-.42l.36-2.54c.59-.24 1.14-.56 1.63-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/></svg>
+    Configurações
+  </button>
+</nav>
+
+<footer class="total-footer" id="footerTotal" style="display:none">
   <div class="footer-inner">
     <div class="total-box">
       <span class="label">Total da compra</span>
@@ -498,6 +703,52 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="modalNovaLista" onclick="if(event.target===this) fecharModalNovaLista()">
+  <div class="modal-box">
+    <h3>Nova lista</h3>
+    <input type="text" class="text-left" id="inputNovaLista" placeholder="Nome da lista (ex: Mercado do mês)" onkeydown="if(event.key==='Enter') confirmarNovaLista()">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModalNovaLista()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmarNovaLista()">Criar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalGerenciarLista" onclick="if(event.target===this) fecharModalGerenciarLista()">
+  <div class="modal-box">
+    <h3>Editar lista</h3>
+    <input type="text" class="text-left" id="inputRenomearLista" placeholder="Nome da lista" onkeydown="if(event.key==='Enter') confirmarRenomearLista()">
+    <div class="modal-actions">
+      <button class="btn-clear" onclick="pedirExclusaoLista(listaEmEdicaoId)"><img class="btn-icon" src="icons/ui/lixo.png" alt=""> Excluir</button>
+      <button class="btn-confirm" onclick="confirmarRenomearLista()">Salvar</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" style="width:100%" onclick="fecharModalGerenciarLista()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalAlerta" onclick="if(event.target===this) fecharAlerta()">
+  <div class="modal-box">
+    <h3>Aviso</h3>
+    <p class="modal-msg" id="alertaMensagem"></p>
+    <div class="modal-actions">
+      <button class="btn-confirm" style="width:100%" onclick="fecharAlerta()">OK</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalConfirmacao" onclick="if(event.target===this) fecharConfirmacao()">
+  <div class="modal-box">
+    <h3>Confirmar</h3>
+    <p class="modal-msg" id="confirmacaoMensagem"></p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharConfirmacao()">Cancelar</button>
+      <button class="btn-clear" onclick="executarConfirmacao()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modalInstalarIOS" onclick="if(event.target===this) fecharModalInstalarIOS()">
   <div class="modal-box">
     <h3><img class="btn-icon" src="icons/ui/download.png" alt=""> Instalar no iPhone</h3>
@@ -511,23 +762,254 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'lista-de-compras-dados';
-  let itens = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const STORAGE_KEY_LISTAS = 'lista-de-compras-listas';
+  const STORAGE_KEY_ATUAL = 'lista-de-compras-lista-atual';
+  const STORAGE_KEY_LEGADO = 'lista-de-compras-dados';
 
-  function alternarTema() {
-    const atual = document.documentElement.getAttribute('data-theme');
-    const novo = atual === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', novo);
-    localStorage.setItem('tema', novo);
-    document.getElementById('metaThemeColor').setAttribute('content', novo === 'light' ? '#cdf7f7' : '#062f2f');
+  let listas = JSON.parse(localStorage.getItem(STORAGE_KEY_LISTAS) || 'null');
+
+  if (!listas) {
+    const itensAntigos = JSON.parse(localStorage.getItem(STORAGE_KEY_LEGADO) || '[]');
+    listas = [{ id: Date.now(), nome: 'Lista 1', itens: itensAntigos }];
+  }
+
+  let listaAtualId = Number(localStorage.getItem(STORAGE_KEY_ATUAL)) || (listas[0] ? listas[0].id : null);
+  if (listaAtualId !== null && !listas.find(l => l.id === listaAtualId)) {
+    listaAtualId = listas[0] ? listas[0].id : null;
+  }
+
+  function listaAtual() {
+    return listas.find(l => l.id === listaAtualId);
+  }
+
+  const PRESETS_COR = [
+    { id: 'teal', accent: '#01B3B3', accentDark: '#018080', onAccent: '#003333' },
+    { id: 'verde', accent: '#22c55e', accentDark: '#16a34a', onAccent: '#063a1e' },
+    { id: 'azul', accent: '#2563eb', accentDark: '#1d4ed8', onAccent: '#ffffff' },
+    { id: 'roxo', accent: '#7c3aed', accentDark: '#6d28d9', onAccent: '#ffffff' },
+    { id: 'rosa', accent: '#db2777', accentDark: '#be185d', onAccent: '#ffffff' },
+    { id: 'laranja', accent: '#ea580c', accentDark: '#c2410c', onAccent: '#ffffff' }
+  ];
+
+  let corSistemaAtual = localStorage.getItem('cor-sistema') || 'teal';
+
+  function aplicarCorSistema(id, salvarPreferencia) {
+    if (salvarPreferencia === undefined) salvarPreferencia = true;
+    const preset = PRESETS_COR.find(p => p.id === id) || PRESETS_COR[0];
+    document.documentElement.style.setProperty('--accent', preset.accent);
+    document.documentElement.style.setProperty('--accent-dark', preset.accentDark);
+    document.documentElement.style.setProperty('--btn-text-on-accent', preset.onAccent);
+    corSistemaAtual = preset.id;
+    if (salvarPreferencia) localStorage.setItem('cor-sistema', preset.id);
+    renderColorSwatches();
+  }
+
+  function renderColorSwatches() {
+    const el = document.getElementById('colorSwatches');
+    if (!el) return;
+    el.innerHTML = PRESETS_COR.map(p => `
+      <button class="color-swatch ${p.id === corSistemaAtual ? 'active' : ''}" style="background:${p.accent}" onclick="aplicarCorSistema('${p.id}')" aria-label="Cor ${p.id}"></button>
+    `).join('');
+  }
+
+  const TAMANHOS_FONTE = { pequeno: '87.5%', medio: '100%', grande: '112.5%' };
+
+  let tamanhoFonteAtual = localStorage.getItem('tamanho-fonte') || 'medio';
+
+  function definirTamanhoFonte(tamanho, salvarPreferencia) {
+    if (salvarPreferencia === undefined) salvarPreferencia = true;
+    document.documentElement.style.fontSize = TAMANHOS_FONTE[tamanho] || TAMANHOS_FONTE.medio;
+    tamanhoFonteAtual = tamanho;
+    if (salvarPreferencia) localStorage.setItem('tamanho-fonte', tamanho);
+    renderFontSizeButtons();
+  }
+
+  function renderFontSizeButtons() {
+    const botoes = document.querySelectorAll('#fontSizeOptions .btn-font-size');
+    botoes.forEach(b => b.classList.toggle('active', b.dataset.tamanho === tamanhoFonteAtual));
+  }
+
+  function definirTema(tema) {
+    document.documentElement.setAttribute('data-theme', tema);
+    localStorage.setItem('tema', tema);
+    document.getElementById('metaThemeColor').setAttribute('content', tema === 'light' ? '#cdf7f7' : '#062f2f');
+    renderTemaButtons();
+  }
+
+  function renderTemaButtons() {
+    const temaAtual = document.documentElement.getAttribute('data-theme');
+    const botoes = document.querySelectorAll('#temaOptions .btn-font-size');
+    botoes.forEach(b => b.classList.toggle('active', b.dataset.tema === temaAtual));
   }
 
   function salvar() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(itens));
+    localStorage.setItem(STORAGE_KEY_LISTAS, JSON.stringify(listas));
+    localStorage.setItem(STORAGE_KEY_ATUAL, String(listaAtualId));
   }
 
   function formatarMoeda(valor) {
     return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  function mostrarAlerta(mensagem) {
+    document.getElementById('alertaMensagem').textContent = mensagem;
+    document.getElementById('modalAlerta').classList.add('open');
+  }
+
+  function fecharAlerta() {
+    document.getElementById('modalAlerta').classList.remove('open');
+  }
+
+  let confirmacaoCallback = null;
+
+  function mostrarConfirmacao(mensagem, callback) {
+    document.getElementById('confirmacaoMensagem').textContent = mensagem;
+    confirmacaoCallback = callback;
+    document.getElementById('modalConfirmacao').classList.add('open');
+  }
+
+  function fecharConfirmacao() {
+    confirmacaoCallback = null;
+    document.getElementById('modalConfirmacao').classList.remove('open');
+  }
+
+  function executarConfirmacao() {
+    const callback = confirmacaoCallback;
+    fecharConfirmacao();
+    if (callback) callback();
+  }
+
+  function resumoLista(lst) {
+    const total = lst.itens.reduce((soma, i) => {
+      const temPreco = i.preco !== null && i.preco !== undefined;
+      return soma + (temPreco ? i.qtd * i.preco : 0);
+    }, 0);
+    return { qtdItens: lst.itens.length, total };
+  }
+
+  function atualizarNavAtiva(aba) {
+    document.getElementById('navBtnListas').classList.toggle('active', aba === 'listas');
+    document.getElementById('navBtnConfig').classList.toggle('active', aba === 'config');
+  }
+
+  function mostrarListas() {
+    document.getElementById('viewListas').style.display = '';
+    document.getElementById('viewLista').style.display = 'none';
+    document.getElementById('viewConfig').style.display = 'none';
+    document.getElementById('footerTotal').style.display = 'none';
+    atualizarNavAtiva('listas');
+    renderListasGrid();
+  }
+
+  function mostrarConfig() {
+    document.getElementById('viewListas').style.display = 'none';
+    document.getElementById('viewLista').style.display = 'none';
+    document.getElementById('viewConfig').style.display = '';
+    document.getElementById('footerTotal').style.display = 'none';
+    atualizarNavAtiva('config');
+    renderTemaButtons();
+    renderColorSwatches();
+    renderFontSizeButtons();
+  }
+
+  function abrirLista(id) {
+    listaAtualId = id;
+    salvar();
+    document.getElementById('viewListas').style.display = 'none';
+    document.getElementById('viewLista').style.display = '';
+    document.getElementById('viewConfig').style.display = 'none';
+    document.getElementById('footerTotal').style.display = '';
+    atualizarNavAtiva('listas');
+    document.getElementById('listaTitulo').textContent = listaAtual().nome;
+    renderizar();
+  }
+
+  function voltarParaListas() {
+    mostrarListas();
+  }
+
+  function renderListasGrid() {
+    const grid = document.getElementById('listsGrid');
+    if (listas.length === 0) {
+      grid.innerHTML = '<div class="empty-lists">Você ainda não tem nenhuma lista. Toque em "+ Nova lista" para criar a primeira.</div>';
+      return;
+    }
+    grid.innerHTML = listas.map(l => {
+      const { qtdItens, total } = resumoLista(l);
+      const metaTxt = qtdItens === 0 ? 'Sem itens' : `${qtdItens} ${qtdItens === 1 ? 'item' : 'itens'} · ${formatarMoeda(total)}`;
+      return `
+        <div class="list-card">
+          <button class="list-card-body" onclick="abrirLista(${l.id})">
+            <div class="list-card-name">${escapeHtml(l.nome)}</div>
+            <div class="list-card-meta">${metaTxt}</div>
+          </button>
+          <button class="list-card-action" onclick="abrirModalGerenciarLista(${l.id})" aria-label="Editar lista">
+            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+          </button>
+          <button class="list-card-action danger" onclick="pedirExclusaoLista(${l.id})" aria-label="Excluir lista">
+            <img src="icons/ui/lixo.png" alt="">
+          </button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function abrirModalNovaLista() {
+    document.getElementById('inputNovaLista').value = '';
+    document.getElementById('modalNovaLista').classList.add('open');
+    setTimeout(() => document.getElementById('inputNovaLista').focus(), 50);
+  }
+
+  function fecharModalNovaLista() {
+    document.getElementById('modalNovaLista').classList.remove('open');
+  }
+
+  function confirmarNovaLista() {
+    const nomeInput = document.getElementById('inputNovaLista').value.trim();
+    const nome = nomeInput || `Lista ${listas.length + 1}`;
+    const nova = { id: Date.now(), nome, itens: [] };
+    listas.push(nova);
+    salvar();
+    fecharModalNovaLista();
+    abrirLista(nova.id);
+  }
+
+  let listaEmEdicaoId = null;
+
+  function abrirModalGerenciarLista(id) {
+    listaEmEdicaoId = id;
+    const lst = listas.find(l => l.id === id);
+    document.getElementById('inputRenomearLista').value = lst.nome;
+    document.getElementById('modalGerenciarLista').classList.add('open');
+    setTimeout(() => document.getElementById('inputRenomearLista').focus(), 50);
+  }
+
+  function fecharModalGerenciarLista() {
+    listaEmEdicaoId = null;
+    document.getElementById('modalGerenciarLista').classList.remove('open');
+  }
+
+  function confirmarRenomearLista() {
+    const nome = document.getElementById('inputRenomearLista').value.trim();
+    if (!nome) {
+      mostrarAlerta('Digite um nome para a lista.');
+      return;
+    }
+    listas.find(l => l.id === listaEmEdicaoId).nome = nome;
+    salvar();
+    renderListasGrid();
+    fecharModalGerenciarLista();
+  }
+
+  function pedirExclusaoLista(id) {
+    const lst = listas.find(l => l.id === id);
+    mostrarConfirmacao(`Excluir a lista "${lst.nome}"? Essa ação não pode ser desfeita.`, () => {
+      listas = listas.filter(l => l.id !== id);
+      if (listaAtualId === id) listaAtualId = listas[0] ? listas[0].id : null;
+      salvar();
+      renderListasGrid();
+      fecharModalGerenciarLista();
+    });
   }
 
   function adicionarItem() {
@@ -538,11 +1020,11 @@
     const preco = precoRaw === '' ? null : parseFloat(precoRaw);
 
     if (!nome) {
-      alert('Digite o nome do item.');
+      mostrarAlerta('Digite o nome do item.');
       return;
     }
 
-    itens.push({
+    listaAtual().itens.push({
       id: Date.now(),
       nome, qtd, espec, preco,
       comprado: false
@@ -561,7 +1043,7 @@
   let idEmEdicao = null;
 
   function editarPreco(id) {
-    const item = itens.find(i => i.id === id);
+    const item = listaAtual().itens.find(i => i.id === id);
     if (!item) return;
     idEmEdicao = id;
     document.getElementById('modalPrecoTitulo').textContent = `Preço unitário de "${item.nome}"`;
@@ -578,7 +1060,7 @@
 
   function confirmarModalPreco() {
     if (idEmEdicao === null) return;
-    const item = itens.find(i => i.id === idEmEdicao);
+    const item = listaAtual().itens.find(i => i.id === idEmEdicao);
     if (item) {
       const valor = document.getElementById('modalPrecoInput').value;
       const preco = parseFloat(String(valor).replace(',', '.'));
@@ -590,35 +1072,38 @@
   }
 
   function removerItem(id) {
-    itens = itens.filter(i => i.id !== id);
+    const lst = listaAtual();
+    lst.itens = lst.itens.filter(i => i.id !== id);
     salvar();
     renderizar();
   }
 
   function toggleComprado(id) {
-    const item = itens.find(i => i.id === id);
+    const item = listaAtual().itens.find(i => i.id === id);
     if (item) item.comprado = !item.comprado;
     salvar();
     renderizar();
   }
 
   function limparLista() {
-    if (itens.length === 0) return;
-    if (confirm('Tem certeza que deseja apagar toda a lista?')) {
-      itens = [];
+    const lst = listaAtual();
+    if (lst.itens.length === 0) return;
+    mostrarConfirmacao('Tem certeza que deseja apagar toda a lista?', () => {
+      lst.itens = [];
       salvar();
       renderizar();
-    }
+    });
   }
 
   function compartilhar() {
-    if (itens.length === 0) {
-      alert('A lista está vazia.');
+    const lst = listaAtual();
+    if (lst.itens.length === 0) {
+      mostrarAlerta('A lista está vazia.');
       return;
     }
-    let texto = '🛒 *Lista de Compras*\n\n';
+    let texto = `🛒 *${lst.nome}*\n\n`;
     let total = 0;
-    itens.forEach(i => {
+    lst.itens.forEach(i => {
       const temPreco = i.preco !== null && i.preco !== undefined;
       const subtotal = temPreco ? i.qtd * i.preco : 0;
       total += subtotal;
@@ -637,16 +1122,17 @@
   }
 
   function renderizar() {
+    const lst = listaAtual();
     const lista = document.getElementById('listaItens');
     let total = 0;
 
-    if (itens.length === 0) {
+    if (lst.itens.length === 0) {
       lista.innerHTML = '';
       document.getElementById('totalGeral').textContent = formatarMoeda(0);
       return;
     }
 
-    lista.innerHTML = itens.map(item => {
+    lista.innerHTML = lst.itens.map(item => {
       const temPreco = item.preco !== null && item.preco !== undefined;
       const subtotal = temPreco ? item.qtd * item.preco : 0;
       total += subtotal;
@@ -680,7 +1166,9 @@
     return div.innerHTML;
   }
 
-  renderizar();
+  aplicarCorSistema(corSistemaAtual, false);
+  definirTamanhoFonte(tamanhoFonteAtual, false);
+  mostrarListas();
 
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
     window.addEventListener('load', () => {
@@ -732,12 +1220,28 @@
     } else if (ehIOS()) {
       document.getElementById('modalInstalarIOS').classList.add('open');
     } else {
-      alert('Para instalar, use o menu do seu navegador e escolha "Adicionar à tela de início" ou "Instalar app".');
+      mostrarAlerta('Para instalar, use o menu do seu navegador e escolha "Adicionar à tela de início" ou "Instalar app".');
     }
   }
 
   function fecharModalInstalarIOS() {
     document.getElementById('modalInstalarIOS').classList.remove('open');
+  }
+
+  function atualizarSistema() {
+    if (!('serviceWorker' in navigator)) {
+      window.location.reload();
+      return;
+    }
+    navigator.serviceWorker.getRegistration().then((reg) => {
+      if (!reg) {
+        window.location.reload();
+        return;
+      }
+      reg.update().finally(() => {
+        window.location.reload();
+      });
+    });
   }
 
   atualizarBotaoInstalar();
