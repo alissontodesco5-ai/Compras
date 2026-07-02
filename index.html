@@ -329,6 +329,12 @@
   input[type="number"] {
     -moz-appearance: textfield;
   }
+  .app-versao {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    margin-top: 12px;
+  }
   .combo-wrap {
     position: relative;
     width: 100%;
@@ -740,6 +746,8 @@
     <svg viewBox="0 0 24 24"><path d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
     Atualizar sistema
   </button>
+
+  <div class="app-versao" id="appVersao">Versão: —</div>
 </div>
 
 <nav class="bottom-nav">
@@ -857,6 +865,8 @@
 </div>
 
 <script>
+  const APP_VERSION = 'v16'; // mantenha igual ao CACHE_NAME em service-worker.js
+
   const STORAGE_KEY_LISTAS = 'lista-de-compras-listas';
   const STORAGE_KEY_ATUAL = 'lista-de-compras-lista-atual';
   const STORAGE_KEY_LEGADO = 'lista-de-compras-dados';
@@ -1031,6 +1041,7 @@
     renderTemaButtons();
     renderColorSwatches();
     renderFontSizeButtons();
+    exibirVersaoApp();
   }
 
   function abrirLista(id) {
@@ -1392,6 +1403,18 @@
       }).catch(() => {});
     });
   }
+
+  function exibirVersaoApp() {
+    const el = document.getElementById('appVersao');
+    el.textContent = `Versão: ${APP_VERSION}`;
+    if (!('caches' in window)) return;
+    caches.keys().then((chaves) => {
+      const nomeCache = chaves.find((k) => k.startsWith('lista-de-compras-'));
+      if (nomeCache) el.textContent = `Versão: ${nomeCache.replace('lista-de-compras-', '')}`;
+    }).catch(() => {});
+  }
+
+  exibirVersaoApp();
 
   // Botão de instalar como app
   let deferredInstallPrompt = null;
