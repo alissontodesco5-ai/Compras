@@ -515,9 +515,14 @@
     padding: 2px 7px;
     border-radius: 6px;
   }
-  .item-meta .item-qtd {
+  .item-meta .item-qtd,
+  .item-meta .item-espec {
     cursor: pointer;
     text-decoration: underline dotted;
+  }
+  .item-meta .item-espec-empty {
+    opacity: 0.7;
+    font-style: italic;
   }
   .item-price {
     font-size: 0.9375rem;
@@ -687,7 +692,7 @@
     <div class="form-row">
       <div class="combo-wrap">
         <input type="text" id="inputItem" placeholder="Item (ex: Arroz)" autocomplete="off"
-          onclick="abrirDropdownItens()" oninput="filtrarDropdownItens()" onfocus="abrirDropdownItens()">
+          onclick="abrirDropdownItens()" oninput="abrirDropdownItens()" onfocus="abrirDropdownItens()">
         <button type="button" class="combo-arrow" onclick="abrirDropdownItens()" tabindex="-1">▾</button>
         <div class="combo-dropdown" id="dropdownItens"></div>
       </div>
@@ -807,6 +812,17 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="modalEspec" onclick="if(event.target===this) fecharModalEspec()">
+  <div class="modal-box">
+    <h3 id="modalEspecTitulo">Especificação</h3>
+    <input type="text" class="text-left" id="modalEspecInput" placeholder="Especificação (ex: 5kg)" onkeydown="if(event.key==='Enter') confirmarModalEspec()">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModalEspec()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmarModalEspec()">Salvar</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modalOrcamento" onclick="if(event.target===this) fecharModalOrcamento()">
   <div class="modal-box">
     <h3>Orçamento da lista</h3>
@@ -880,7 +896,7 @@
 </div>
 
 <script>
-  const APP_VERSION = 'v18'; // mantenha igual ao CACHE_NAME em service-worker.js
+  const APP_VERSION = 'v19'; // mantenha igual ao CACHE_NAME em service-worker.js
 
   const STORAGE_KEY_LISTAS = 'lista-de-compras-listas';
   const STORAGE_KEY_ATUAL = 'lista-de-compras-lista-atual';
@@ -1234,6 +1250,33 @@
     fecharModalQtd();
   }
 
+  function editarEspec(id) {
+    const item = listaAtual().itens.find(i => i.id === id);
+    if (!item) return;
+    idEmEdicao = id;
+    document.getElementById('modalEspecTitulo').textContent = `Especificação de "${item.nome}"`;
+    const input = document.getElementById('modalEspecInput');
+    input.value = item.espec || '';
+    document.getElementById('modalEspec').classList.add('open');
+    setTimeout(() => input.focus(), 50);
+  }
+
+  function fecharModalEspec() {
+    idEmEdicao = null;
+    document.getElementById('modalEspec').classList.remove('open');
+  }
+
+  function confirmarModalEspec() {
+    if (idEmEdicao === null) return;
+    const item = listaAtual().itens.find(i => i.id === idEmEdicao);
+    if (item) {
+      item.espec = document.getElementById('modalEspecInput').value.trim();
+      salvar();
+      renderizar();
+    }
+    fecharModalEspec();
+  }
+
   function confirmarModalPreco() {
     if (idEmEdicao === null) return;
     const item = listaAtual().itens.find(i => i.id === idEmEdicao);
@@ -1357,7 +1400,9 @@
       if (item.comprado) gasto += subtotal;
       const metaParts = [];
       if (item.qtd) metaParts.push(`<span class="item-qtd" onclick="editarQtd(${item.id})">Qtd: ${item.qtd}</span>`);
-      if (item.espec) metaParts.push(`<span>${escapeHtml(item.espec)}</span>`);
+      metaParts.push(item.espec
+        ? `<span class="item-espec" onclick="editarEspec(${item.id})">${escapeHtml(item.espec)}</span>`
+        : `<span class="item-espec item-espec-empty" onclick="editarEspec(${item.id})">+ Especificação</span>`);
 
       const precoHtml = temPreco
         ? `<div class="item-price" onclick="editarPreco(${item.id})">${formatarMoeda(subtotal)}</div>`
