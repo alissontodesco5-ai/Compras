@@ -1,10 +1,15 @@
-const CACHE_NAME = 'lista-de-compras-v2';
+const CACHE_NAME = 'lista-de-compras-v14';
 const ASSETS = [
   './index.html',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './icons/icon-512-maskable.png'
+  './icons/icon-512-maskable.png',
+  './icons/ui/carrinho.png',
+  './icons/ui/compartilhar.png',
+  './icons/ui/lixo.png',
+  './icons/ui/download.png',
+  './icons/ui/fechar.png'
 ];
 
 self.addEventListener('install', (event) => {

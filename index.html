@@ -48,6 +48,10 @@
     margin: 0 0 8px 0;
     font-size: 20px;
   }
+  .header-inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
   .total-box {
     background: rgba(0,0,0,0.25);
     border-radius: 10px;
@@ -89,6 +93,42 @@
     font-size: 15px;
   }
   input::placeholder { color: var(--muted); }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  .input-prefix {
+    position: relative;
+    width: 100%;
+  }
+  .input-prefix span {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 15px;
+    pointer-events: none;
+  }
+  .input-prefix input {
+    padding-left: 38px;
+  }
+  .btn-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    margin-right: 6px;
+    margin-top: -2px;
+  }
+  header h1 .btn-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
   button {
     cursor: pointer;
     border: none;
@@ -136,18 +176,48 @@
     text-decoration: line-through;
   }
   .item input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
     width: 22px;
     height: 22px;
     margin-top: 2px;
-    accent-color: var(--accent);
     flex-shrink: 0;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background: #0f172a;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.15s, border-color 0.15s;
   }
-  .item-info { flex: 1; min-width: 0; }
+  .item input[type="checkbox"]:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .item input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 11px;
+    border: solid #063a1e;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .item-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
   .item-name {
     font-size: 16px;
     font-weight: 600;
-    margin-bottom: 4px;
     word-break: break-word;
+    flex: 1 1 auto;
+    min-width: 80px;
   }
   .item-meta {
     font-size: 13px;
@@ -155,6 +225,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+    flex: 0 0 auto;
   }
   .item-meta span {
     background: #0f172a;
@@ -165,9 +236,10 @@
     font-size: 15px;
     font-weight: bold;
     color: var(--accent);
-    margin-top: 4px;
     cursor: pointer;
     display: inline-block;
+    flex: 0 0 auto;
+    white-space: nowrap;
   }
   .item-price-empty {
     color: var(--muted);
@@ -183,6 +255,11 @@
     font-size: 20px;
     padding: 4px 8px;
     flex-shrink: 0;
+  }
+  .btn-del img {
+    width: 16px;
+    height: 16px;
+    display: block;
   }
   .empty {
     text-align: center;
@@ -250,21 +327,47 @@
   .modal-box p b {
     color: var(--text);
   }
+
+  /* Telas largas (computador) */
+  @media (min-width: 860px) {
+    .header-inner {
+      max-width: 960px;
+    }
+    .total-box {
+      max-width: 340px;
+      margin: 0 auto;
+    }
+    .container {
+      max-width: 960px;
+    }
+    .form-card .form-row {
+      align-items: flex-start;
+    }
+    .form-card > .form-row:first-child,
+    .btn-add {
+      max-width: 100%;
+    }
+    .item-name {
+      font-size: 17px;
+    }
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>🛒 Lista de Compras</h1>
-  <div class="total-box">
-    <span class="label">Total da compra</span>
-    <span id="totalGeral">R$ 0,00</span>
+  <div class="header-inner">
+    <h1><img class="btn-icon" src="icons/ui/carrinho.png" alt=""> Lista de Compras</h1>
+    <div class="total-box">
+      <span class="label">Total da compra</span>
+      <span id="totalGeral">R$ 0,00</span>
+    </div>
   </div>
 </header>
 
 <div class="container">
 
-  <button class="btn-install" id="btnInstalar" onclick="instalarApp()">📲 Instalar App</button>
+  <button class="btn-install" id="btnInstalar" onclick="instalarApp()"><img class="btn-icon" src="icons/ui/download.png" alt=""> Instalar App</button>
 
   <div class="form-card">
     <div class="form-row">
@@ -275,14 +378,17 @@
       <input type="text" id="inputEspec" placeholder="Especificação (ex: 5kg)">
     </div>
     <div class="form-row">
-      <input type="number" id="inputPreco" placeholder="Preço unitário (opcional)" step="0.01" min="0">
+      <div class="input-prefix">
+        <span>R$</span>
+        <input type="number" id="inputPreco" placeholder="Preço unitário (opcional)" step="0.01" min="0">
+      </div>
     </div>
     <button class="btn-add" onclick="adicionarItem()">+ Adicionar Item</button>
   </div>
 
   <div class="actions-bar">
-    <button class="btn-share" onclick="compartilhar()">📤 Compartilhar</button>
-    <button class="btn-clear" onclick="limparLista()">🗑️ Limpar Lista</button>
+    <button class="btn-share" onclick="compartilhar()"><img class="btn-icon" src="icons/ui/compartilhar.png" alt=""> Compartilhar</button>
+    <button class="btn-clear" onclick="limparLista()"><img class="btn-icon" src="icons/ui/lixo.png" alt=""> Limpar Lista</button>
   </div>
 
   <div id="listaItens"></div>
@@ -292,7 +398,10 @@
 <div class="modal-overlay" id="modalPreco" onclick="if(event.target===this) fecharModalPreco()">
   <div class="modal-box">
     <h3 id="modalPrecoTitulo">Preço unitário</h3>
-    <input type="number" id="modalPrecoInput" placeholder="0,00" step="0.01" min="0" inputmode="decimal" onkeydown="if(event.key==='Enter') confirmarModalPreco()">
+    <div class="input-prefix">
+      <span>R$</span>
+      <input type="number" id="modalPrecoInput" placeholder="0,00" step="0.01" min="0" inputmode="decimal" onkeydown="if(event.key==='Enter') confirmarModalPreco()">
+    </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="fecharModalPreco()">Cancelar</button>
       <button class="btn-confirm" onclick="confirmarModalPreco()">Salvar</button>
@@ -302,7 +411,7 @@
 
 <div class="modal-overlay" id="modalInstalarIOS" onclick="if(event.target===this) fecharModalInstalarIOS()">
   <div class="modal-box">
-    <h3>📲 Instalar no iPhone</h3>
+    <h3><img class="btn-icon" src="icons/ui/download.png" alt=""> Instalar no iPhone</h3>
     <p>1. Toque no botão de <b>compartilhar</b> (□↑) na barra do Safari</p>
     <p>2. Escolha <b>"Adicionar à Tela de Início"</b></p>
     <p>3. Toque em <b>"Adicionar"</b></p>
@@ -435,7 +544,7 @@
     let total = 0;
 
     if (itens.length === 0) {
-      lista.innerHTML = '<div class="empty">Nenhum item na lista.<br>Adicione o primeiro item acima 👆</div>';
+      lista.innerHTML = '';
       document.getElementById('totalGeral').textContent = formatarMoeda(0);
       return;
     }
@@ -460,7 +569,7 @@
             <div class="item-meta">${metaParts.map(m => `<span>${escapeHtml(m)}</span>`).join('')}</div>
             ${precoHtml}
           </div>
-          <button class="btn-del" onclick="removerItem(${item.id})">✕</button>
+          <button class="btn-del" onclick="removerItem(${item.id})"><img src="icons/ui/fechar.png" alt="remover"></button>
         </div>
       `;
     }).join('');
