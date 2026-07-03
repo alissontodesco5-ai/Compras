@@ -152,7 +152,8 @@
     background: var(--danger);
     border: 2px solid var(--card);
   }
-  .bottom-nav button.tem-atualizacao .bell-dot {
+  .bottom-nav button.tem-atualizacao .bell-dot,
+  .bottom-nav button.tem-estoque-baixo .bell-dot {
     display: block;
   }
   @keyframes sino-pulsar {
@@ -236,6 +237,17 @@
     font-size: 0.8125rem;
     color: var(--muted);
     font-weight: normal;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .list-card-meta .item-qtd {
+    cursor: pointer;
+    text-decoration: underline dotted;
+  }
+  .list-card.baixo-estoque .list-card-name,
+  .list-card.baixo-estoque .list-card-meta {
+    color: var(--danger);
   }
   .list-card-action {
     flex: 0 0 auto;
@@ -260,7 +272,51 @@
     width: 16px;
     height: 16px;
   }
+  .list-card-action.qty-btn {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .drag-handle {
+    flex: 0 0 auto;
+    width: 36px;
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--border);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    touch-action: none;
+  }
+  .drag-handle svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+  .dragging {
+    opacity: 0.5;
+  }
+  .item .drag-handle {
+    border-left: none;
+    align-self: center;
+    width: auto;
+  }
+  .item.dragging,
+  .list-card.dragging {
+    background: var(--btn-secondary-bg);
+  }
+  .item-meta span.item-transferido {
+    background: var(--accent);
+    color: var(--btn-text-on-accent);
+  }
   .empty-lists {
+    text-align: center;
+    color: var(--muted);
+    padding: 30px 10px;
+  }
+  .empty-search {
     text-align: center;
     color: var(--muted);
     padding: 30px 10px;
@@ -280,9 +336,108 @@
     margin: 0 0 12px 0;
     font-size: 1.1875rem;
   }
+  .lista-titulo-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .lista-titulo-row .lista-titulo {
+    margin-bottom: 0;
+  }
+  .kebab-wrap {
+    position: relative;
+  }
+  .btn-kebab {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 4px 10px;
+  }
+  .kebab-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 4px);
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    z-index: 30;
+    min-width: 180px;
+    overflow: hidden;
+  }
+  .kebab-menu.open {
+    display: block;
+  }
+  .kebab-menu button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 12px;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    color: var(--text);
+    text-align: left;
+  }
+  .kebab-menu button:hover {
+    background: var(--accent-dark);
+  }
+  .kebab-menu button:last-child {
+    color: var(--danger);
+  }
   .config-label {
     font-weight: 700;
     margin-bottom: 12px;
+  }
+  .config-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .config-label-row .config-label {
+    margin-bottom: 0;
+  }
+  .btn-cat-add {
+    background: var(--accent);
+    color: var(--btn-text-on-accent);
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+  }
+  .btn-cat-add.active {
+    background: var(--accent-dark);
+  }
+  .cat-group {
+    margin-bottom: 10px;
+  }
+  .cat-itens {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+    padding-left: 12px;
+  }
+  .cat-itens.open {
+    display: flex;
+  }
+  .cat-empty {
+    padding: 6px 0;
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  .btn-cat-add-item-full {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--accent);
+    font-size: 0.8125rem;
+    padding: 10px;
   }
   .color-swatches {
     display: flex;
@@ -302,6 +457,17 @@
   .font-size-options {
     display: flex;
     gap: 8px;
+  }
+  .sort-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .sort-options .btn-font-size {
+    flex: 1 1 auto;
+    padding: 8px 12px;
+    font-size: 0.8125rem;
   }
   .btn-font-size {
     flex: 1;
@@ -323,6 +489,14 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 16px;
+    animation: viewFadeIn 0.25s ease;
+  }
+  @keyframes viewFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .container { animation: none; }
   }
   .form-card {
     background: var(--card);
@@ -337,7 +511,36 @@
     margin-bottom: 8px;
   }
   .form-row.single { display: block; }
-  input {
+  .form-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: var(--text);
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+  .form-toggle-arrow {
+    transition: transform 0.15s ease;
+  }
+  .form-card.expanded .form-toggle-arrow {
+    transform: rotate(180deg);
+  }
+  .form-body {
+    display: none;
+    margin-top: 12px;
+  }
+  .form-card.expanded .form-body {
+    display: block;
+  }
+  .list-search-wrap {
+    margin-bottom: 12px;
+  }
+  input, select {
     width: 100%;
     padding: 10px;
     border-radius: 8px;
@@ -347,6 +550,14 @@
     font-size: 0.9375rem;
   }
   input::placeholder { color: var(--muted); }
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 0.875rem;
+    color: var(--text);
+  }
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -453,20 +664,10 @@
     margin-top: 4px;
   }
   .btn-add:active { background: var(--accent-dark); }
-  .actions-bar {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
   .btn-clear {
     flex: 1;
     background: var(--danger);
     color: white;
-  }
-  .btn-share {
-    flex: 1;
-    background: var(--btn-secondary-bg);
-    color: var(--text);
   }
   .item {
     background: var(--card);
@@ -484,7 +685,8 @@
   .item.bought .item-name {
     text-decoration: line-through;
   }
-  .item input[type="checkbox"] {
+  .item input[type="checkbox"],
+  .checkbox-row input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
     width: 22px;
@@ -498,11 +700,13 @@
     position: relative;
     transition: background 0.15s, border-color 0.15s;
   }
-  .item input[type="checkbox"]:checked {
+  .item input[type="checkbox"]:checked,
+  .checkbox-row input[type="checkbox"]:checked {
     background: var(--accent);
     border-color: var(--accent);
   }
-  .item input[type="checkbox"]:checked::after {
+  .item input[type="checkbox"]:checked::after,
+  .checkbox-row input[type="checkbox"]:checked::after {
     content: "";
     position: absolute;
     left: 6px;
@@ -703,6 +907,12 @@
 
 <div id="viewListas" class="container">
   <button class="btn-add-list-full" onclick="abrirModalNovaLista()">+ Nova lista</button>
+  <div class="sort-options" id="sortOptionsListas">
+    <button class="btn-font-size" data-ordem="recente" onclick="definirOrdemListas('recente')">Mais recente</button>
+    <button class="btn-font-size" data-ordem="antiga" onclick="definirOrdemListas('antiga')">Mais antiga</button>
+    <button class="btn-font-size" data-ordem="az" onclick="definirOrdemListas('az')">A-Z</button>
+    <button class="btn-font-size" data-ordem="manual" onclick="definirOrdemListas('manual')">Manual</button>
+  </div>
   <div class="lists-grid" id="listsGrid"></div>
 </div>
 
@@ -712,33 +922,51 @@
     <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M15.4 4.6 8 12l7.4 7.4-1.4 1.4L5.2 12l8.8-8.8z"/></svg>
     Voltar para listas
   </button>
-  <h2 class="lista-titulo" id="listaTitulo"></h2>
-
-  <div class="form-card">
-    <div class="form-row">
-      <div class="combo-wrap">
-        <input type="text" id="inputItem" placeholder="Item (ex: Arroz)" autocomplete="off"
-          onclick="abrirDropdownItens()" oninput="abrirDropdownItens()" onfocus="abrirDropdownItens()">
-        <button type="button" class="combo-arrow" onclick="abrirDropdownItens()" tabindex="-1">▾</button>
-        <div class="combo-dropdown" id="dropdownItens"></div>
+  <div class="lista-titulo-row">
+    <h2 class="lista-titulo" id="listaTitulo"></h2>
+    <div class="kebab-wrap">
+      <button type="button" class="btn-kebab" onclick="toggleMenuLista(event)">⋮</button>
+      <div class="kebab-menu" id="menuLista">
+        <button onclick="fecharMenuLista(); compartilhar()"><img class="btn-icon" src="icons/ui/compartilhar.png" alt=""> Compartilhar</button>
+        <button onclick="fecharMenuLista(); adicionarListaAoEstoque()">
+          <svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M3 3h18v6H3V3zm1 8h16v10H4V11zm4 2v2h8v-2H8z"/></svg>
+          Adicionar ao Estoque
+        </button>
+        <button onclick="fecharMenuLista(); limparLista()"><img class="btn-icon" src="icons/ui/lixo.png" alt=""> Limpar Lista</button>
       </div>
     </div>
-    <div class="form-row">
-      <input type="number" id="inputQtd" placeholder="Qtd" min="1" value="1">
-      <input type="text" id="inputEspec" placeholder="Especificação (ex: 5kg)">
-    </div>
-    <div class="form-row">
-      <div class="input-prefix">
-        <span>R$</span>
-        <input type="number" id="inputPreco" placeholder="Preço unitário (opcional)" step="0.01" min="0">
-      </div>
-    </div>
-    <button class="btn-add" onclick="adicionarItem()">+ Adicionar Item</button>
   </div>
 
-  <div class="actions-bar">
-    <button class="btn-share" onclick="compartilhar()"><img class="btn-icon" src="icons/ui/compartilhar.png" alt=""> Compartilhar</button>
-    <button class="btn-clear" onclick="limparLista()"><img class="btn-icon" src="icons/ui/lixo.png" alt=""> Limpar Lista</button>
+  <div class="form-card" id="formCard">
+    <button type="button" class="form-toggle" onclick="toggleFormCard()">
+      <span>+ Adicionar Item</span>
+      <span class="form-toggle-arrow" id="formToggleArrow">▾</span>
+    </button>
+    <div class="form-body" id="formBody">
+      <div class="form-row">
+        <div class="combo-wrap">
+          <input type="text" id="inputItem" placeholder="Item (ex: Arroz)" autocomplete="off"
+            onclick="abrirDropdownItens()" oninput="abrirDropdownItens()" onfocus="abrirDropdownItens()">
+          <button type="button" class="combo-arrow" onclick="abrirDropdownItens()" tabindex="-1">▾</button>
+          <div class="combo-dropdown" id="dropdownItens"></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <input type="number" id="inputQtd" placeholder="Qtd" min="1" value="1">
+        <input type="text" id="inputEspec" placeholder="Especificação (ex: 5kg)">
+      </div>
+      <div class="form-row">
+        <div class="input-prefix">
+          <span>R$</span>
+          <input type="number" id="inputPreco" placeholder="Preço unitário (opcional)" step="0.01" min="0">
+        </div>
+      </div>
+      <button class="btn-add" onclick="adicionarItem()">+ Adicionar Item</button>
+    </div>
+  </div>
+
+  <div class="list-search-wrap">
+    <input type="text" id="inputBuscaItem" placeholder="Buscar item na lista..." oninput="renderizar()">
   </div>
 
   <div id="listaItens"></div>
@@ -776,6 +1004,28 @@
     </div>
   </div>
 
+  <div class="form-card">
+    <div class="config-label">Estoque</div>
+    <label class="checkbox-row" style="margin-top:0">
+      <input type="checkbox" id="checkSugerirReposicao" onchange="sugerirReposicao = this.checked; salvarSugerirReposicao();">
+      Sugerir reposição automática quando um item zerar no estoque
+    </label>
+  </div>
+
+  <div class="form-card" id="itensCadastradosCard">
+    <button type="button" class="form-toggle" onclick="toggleItensCadastrados()">
+      <span>Itens cadastrados</span>
+      <span class="form-toggle-arrow" id="itensCadastradosArrow">▾</span>
+    </button>
+    <div class="form-body" id="itensCadastradosBody">
+      <div class="config-label-row">
+        <div class="config-label">Categorias</div>
+        <button class="btn-cat-add" onclick="abrirModalPrompt('Nova categoria', '', 'Nome da categoria', criarCategoria)">+ Categoria</button>
+      </div>
+      <div id="catalogoManager"></div>
+    </div>
+  </div>
+
   <button class="btn-install" id="btnInstalar" onclick="instalarApp()"><img class="btn-icon" src="icons/ui/download.png" alt=""> Instalar App</button>
   <button class="btn-update" id="btnAtualizar" onclick="atualizarSistema()">
     <svg viewBox="0 0 24 24"><path d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
@@ -785,10 +1035,32 @@
   <div class="app-versao" id="appVersao">Versão: —</div>
 </div>
 
+<div id="viewEstoque" class="container" style="display:none">
+  <h2 class="lista-titulo">Estoque</h2>
+
+  <div class="config-label-row">
+    <button class="btn-cat-add" onclick="abrirModalPrompt('Novo local', '', 'Nome do local', criarLocal)">+ Local</button>
+    <button class="btn-cat-add" id="btnAtualizarEstoque" onclick="toggleModoAtualizacaoEstoque()">Atualizar Estoque</button>
+  </div>
+
+  <div id="locaisManager"></div>
+</div>
+
 <nav class="bottom-nav">
   <button id="navBtnListas" onclick="mostrarListas()">
     <svg viewBox="0 0 24 24"><path d="M4 5h16v2H4V5zm0 6h16v2H4v-2zm0 6h16v2H4v-2z"/></svg>
     Listas
+  </button>
+  <button id="navBtnEstoque" onclick="mostrarEstoque()">
+    <span class="bell-wrap">
+      <svg viewBox="0 0 24 24"><path d="M3 3h18v6H3V3zm1 8h16v10H4V11zm4 2v2h8v-2H8z"/></svg>
+      <span class="bell-dot" id="estoqueBaixoDot"></span>
+    </span>
+    Estoque
+  </button>
+  <button id="navBtnEstoqueBaixo" onclick="mostrarEstoqueBaixo()" style="display:none">
+    <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+    Estoque baixo
   </button>
   <button id="navBtnAtualizacao" onclick="clicarSinoAtualizacao()" style="display:none">
     <span class="bell-wrap">
@@ -852,6 +1124,56 @@
     <div class="modal-actions">
       <button class="btn-cancel" onclick="fecharModalEspec()">Cancelar</button>
       <button class="btn-confirm" onclick="confirmarModalEspec()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalPrompt" onclick="if(event.target===this) fecharModalPrompt()">
+  <div class="modal-box">
+    <h3 id="modalPromptTitulo">Título</h3>
+    <input type="text" class="text-left" id="modalPromptInput" placeholder="" onkeydown="if(event.key==='Enter') confirmarModalPrompt()">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModalPrompt()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmarModalPrompt()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalEstoqueItem" onclick="if(event.target===this) fecharModalEstoqueItem()">
+  <div class="modal-box">
+    <h3 id="modalEstoqueItemTitulo">Adicionar item</h3>
+    <div class="combo-wrap">
+      <input type="text" class="text-left" id="inputEstoqueItemNome" placeholder="Item" autocomplete="off"
+        onclick="abrirDropdownEstoqueItens()" oninput="abrirDropdownEstoqueItens()" onfocus="abrirDropdownEstoqueItens()">
+      <div class="combo-dropdown" id="dropdownEstoqueItens"></div>
+    </div>
+    <input type="number" id="inputEstoqueItemQtd" placeholder="Quantidade" min="1" value="1" style="margin-top:8px">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModalEstoqueItem()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmarModalEstoqueItem()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalEscolherLocal" onclick="if(event.target===this) fecharModalEscolherLocal()">
+  <div class="modal-box">
+    <h3 id="modalEscolherLocalTitulo">Escolher local</h3>
+    <select id="selectEscolherLocal" onchange="aoMudarSelectEscolherLocal()"></select>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModalEscolherLocal()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmarModalEscolherLocal()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalEscolherListaDestino" onclick="if(event.target===this) fecharModalEscolherListaDestino()">
+  <div class="modal-box">
+    <h3 id="modalEscolherListaDestinoTitulo">Escolher lista</h3>
+    <select id="selectEscolherListaDestino"></select>
+    <input type="number" id="inputQtdListaDestino" placeholder="Quantidade a comprar" min="1" value="1" style="margin-top:8px">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModalEscolherListaDestino()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmarModalEscolherListaDestino()">Confirmar</button>
     </div>
   </div>
 </div>
@@ -935,6 +1257,16 @@
   const STORAGE_KEY_ATUAL = 'lista-de-compras-lista-atual';
   const STORAGE_KEY_LEGADO = 'lista-de-compras-dados';
   const STORAGE_KEY_ITENS_EXTRA = 'lista-de-compras-itens-extra';
+  const STORAGE_KEY_CATALOGO = 'lista-de-compras-catalogo';
+  const STORAGE_KEY_ORDEM_LISTAS = 'lista-de-compras-ordem-listas';
+
+  let ordemListas = localStorage.getItem(STORAGE_KEY_ORDEM_LISTAS) || 'recente';
+
+  function definirOrdemListas(modo) {
+    ordemListas = modo;
+    localStorage.setItem(STORAGE_KEY_ORDEM_LISTAS, modo);
+    renderListasGrid();
+  }
 
   const CATALOGO_PADRAO = {
     'Higiene e Cuidados Pessoais': ['Sabonete', 'Sabonete líquido', 'Shampoo', 'Condicionador', 'Creme dental', 'Enxaguante bucal', 'Fio dental', 'Desodorante', 'Algodão', 'Hastes flexíveis', 'Protetor solar', 'Hidratante corporal', 'Aparelho de barbear', 'Creme de barbear'],
@@ -948,17 +1280,676 @@
     'Outros': ['Papel higiênico']
   };
 
-  const ITENS_PADRAO = Object.values(CATALOGO_PADRAO).flat();
+  let catalogo = JSON.parse(localStorage.getItem(STORAGE_KEY_CATALOGO) || 'null');
 
-  let itensExtra = JSON.parse(localStorage.getItem(STORAGE_KEY_ITENS_EXTRA) || '[]');
+  if (!catalogo) {
+    catalogo = JSON.parse(JSON.stringify(CATALOGO_PADRAO));
+    const itensExtraLegado = JSON.parse(localStorage.getItem(STORAGE_KEY_ITENS_EXTRA) || '[]');
+    itensExtraLegado.forEach(nome => {
+      if (!existeNoCatalogo(nome)) {
+        if (!catalogo['Outros']) catalogo['Outros'] = [];
+        catalogo['Outros'].push(nome);
+      }
+    });
+    salvarCatalogo();
+  }
+
+  function salvarCatalogo() {
+    localStorage.setItem(STORAGE_KEY_CATALOGO, JSON.stringify(catalogo));
+  }
+
+  function existeNoCatalogo(nome) {
+    return Object.values(catalogo).some(itens => itens.some(n => n.toLowerCase() === nome.toLowerCase()));
+  }
 
   function registrarItemNoCatalogo(nome) {
-    const jaExiste = ITENS_PADRAO.some(n => n.toLowerCase() === nome.toLowerCase()) ||
-      itensExtra.some(n => n.toLowerCase() === nome.toLowerCase());
-    if (jaExiste) return;
-    itensExtra.push(nome);
-    localStorage.setItem(STORAGE_KEY_ITENS_EXTRA, JSON.stringify(itensExtra));
-    popularDatalists();
+    if (existeNoCatalogo(nome)) return;
+    if (!catalogo['Outros']) catalogo['Outros'] = [];
+    catalogo['Outros'].push(nome);
+    salvarCatalogo();
+    renderGerenciarItens();
+  }
+
+  function criarCategoria(nome) {
+    if (catalogo[nome]) {
+      mostrarAlerta('Já existe uma categoria com esse nome.');
+      return;
+    }
+    catalogo[nome] = [];
+    salvarCatalogo();
+    renderGerenciarItens();
+  }
+
+  function renomearCategoria(nomeAtual, novoNome) {
+    if (novoNome === nomeAtual) return;
+    if (catalogo[novoNome]) {
+      mostrarAlerta('Já existe uma categoria com esse nome.');
+      return;
+    }
+    const novoCatalogo = {};
+    Object.keys(catalogo).forEach(cat => {
+      novoCatalogo[cat === nomeAtual ? novoNome : cat] = catalogo[cat];
+    });
+    catalogo = novoCatalogo;
+    salvarCatalogo();
+    renderGerenciarItens();
+  }
+
+  function excluirCategoria(nome) {
+    mostrarConfirmacao(`Excluir a categoria "${nome}"? Os itens dela serão movidos para "Outros".`, () => {
+      const itens = catalogo[nome] || [];
+      delete catalogo[nome];
+      if (itens.length) {
+        if (!catalogo['Outros']) catalogo['Outros'] = [];
+        itens.forEach(item => {
+          if (!catalogo['Outros'].some(n => n.toLowerCase() === item.toLowerCase())) {
+            catalogo['Outros'].push(item);
+          }
+        });
+      }
+      salvarCatalogo();
+      renderGerenciarItens();
+    });
+  }
+
+  function adicionarItemCatalogo(categoria, nome) {
+    if (existeNoCatalogo(nome)) {
+      mostrarAlerta('Esse item já está cadastrado.');
+      return;
+    }
+    catalogo[categoria].push(nome);
+    salvarCatalogo();
+    renderGerenciarItens();
+  }
+
+  function editarItemCatalogoPrompt(categoria, idx) {
+    const nomeAtual = catalogo[categoria][idx];
+    abrirModalPrompt('Editar item', nomeAtual, 'Nome do item', (novoNome) => {
+      const duplicado = Object.entries(catalogo).some(([cat, itens]) =>
+        itens.some((n, i) => n.toLowerCase() === novoNome.toLowerCase() && !(cat === categoria && i === idx))
+      );
+      if (duplicado) {
+        mostrarAlerta('Esse item já está cadastrado.');
+        return;
+      }
+      catalogo[categoria][idx] = novoNome;
+      salvarCatalogo();
+      renderGerenciarItens();
+    });
+  }
+
+  function excluirItemCatalogo(categoria, idx) {
+    const nome = catalogo[categoria][idx];
+    mostrarConfirmacao(`Excluir o item "${nome}" do catálogo?`, () => {
+      catalogo[categoria].splice(idx, 1);
+      salvarCatalogo();
+      renderGerenciarItens();
+    });
+  }
+
+  function escJs(str) {
+    return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  }
+
+  let categoriasExpandidas = new Set();
+
+  function toggleCategoria(cat) {
+    if (categoriasExpandidas.has(cat)) categoriasExpandidas.delete(cat);
+    else categoriasExpandidas.add(cat);
+    renderGerenciarItens();
+  }
+
+  const ICONE_LAPIS = '<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>';
+  const ICONE_GRIP = '<svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>';
+
+  function ativarDragReorder(handleClass, rowSelector, scopeSelector, onDrop) {
+    let dragEl = null;
+    let scopeEl = null;
+
+    function onPointerMove(e) {
+      if (!dragEl) return;
+      const y = e.clientY;
+      const parent = dragEl.parentElement;
+      if (!parent) return;
+      const rows = [...parent.querySelectorAll(rowSelector)].filter(r => r.parentElement === parent);
+      for (const row of rows) {
+        if (row === dragEl) continue;
+        const rect = row.getBoundingClientRect();
+        const meio = rect.top + rect.height / 2;
+        if (y < meio && row.previousElementSibling !== dragEl) {
+          parent.insertBefore(dragEl, row);
+          break;
+        } else if (y >= meio && row.nextElementSibling !== dragEl) {
+          parent.insertBefore(dragEl, row.nextElementSibling);
+          break;
+        }
+      }
+    }
+
+    function onPointerUp() {
+      if (!dragEl) return;
+      dragEl.classList.remove('dragging');
+      const parent = dragEl.parentElement;
+      const ids = [...parent.querySelectorAll(rowSelector)].filter(r => r.parentElement === parent).map(r => r.dataset.dragId);
+      const scope = scopeEl;
+      dragEl = null;
+      scopeEl = null;
+      document.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener('pointerup', onPointerUp);
+      document.removeEventListener('pointercancel', onPointerUp);
+      onDrop(scope, ids);
+    }
+
+    document.addEventListener('pointerdown', (e) => {
+      const handle = e.target.closest('.' + handleClass);
+      if (!handle) return;
+      const row = handle.closest(rowSelector);
+      const scope = handle.closest(scopeSelector);
+      if (!row || !scope) return;
+      e.preventDefault();
+      dragEl = row;
+      scopeEl = scope;
+      dragEl.classList.add('dragging');
+      document.addEventListener('pointermove', onPointerMove);
+      document.addEventListener('pointerup', onPointerUp);
+      document.addEventListener('pointercancel', onPointerUp);
+    });
+  }
+
+  function renderGerenciarItens() {
+    const container = document.getElementById('catalogoManager');
+    if (!container) return;
+    const categorias = Object.keys(catalogo);
+    if (categorias.length === 0) {
+      container.innerHTML = '<div class="empty-lists">Nenhuma categoria cadastrada.</div>';
+      return;
+    }
+    container.innerHTML = categorias.map(cat => {
+      const itens = catalogo[cat];
+      const aberta = categoriasExpandidas.has(cat);
+      const metaTxt = itens.length === 0 ? 'Sem itens' : `${itens.length} ${itens.length === 1 ? 'item' : 'itens'}`;
+
+      const itensHtml = itens.length
+        ? itens.map((item, idx) => `
+            <div class="list-card" data-drag-id="${escapeHtml(item)}">
+              <div class="list-card-body">
+                <div class="list-card-name">${escapeHtml(item)}</div>
+              </div>
+              <button class="list-card-action" onclick="editarItemCatalogoPrompt('${escJs(cat)}', ${idx})" aria-label="Editar item">${ICONE_LAPIS}</button>
+              <button class="list-card-action danger" onclick="excluirItemCatalogo('${escJs(cat)}', ${idx})" aria-label="Excluir item">
+                <img src="icons/ui/lixo.png" alt="">
+              </button>
+              <div class="drag-handle drag-handle-catitem" aria-label="Arrastar para reordenar">${ICONE_GRIP}</div>
+            </div>
+          `).join('')
+        : '<div class="cat-empty">Sem itens</div>';
+
+      return `
+        <div class="cat-group" data-drag-id="${escapeHtml(cat)}">
+          <div class="list-card">
+            <button class="list-card-body" onclick="toggleCategoria('${escJs(cat)}')">
+              <div class="list-card-name">${escapeHtml(cat)}</div>
+              <div class="list-card-meta">${metaTxt} ${aberta ? '▴' : '▾'}</div>
+            </button>
+            <button class="list-card-action" onclick="abrirModalPrompt('Renomear categoria', '${escJs(cat)}', 'Nome da categoria', (novoNome) => renomearCategoria('${escJs(cat)}', novoNome))" aria-label="Editar categoria">${ICONE_LAPIS}</button>
+            <button class="list-card-action danger" onclick="excluirCategoria('${escJs(cat)}')" aria-label="Excluir categoria">
+              <img src="icons/ui/lixo.png" alt="">
+            </button>
+            <div class="drag-handle drag-handle-categoria" aria-label="Arrastar para reordenar">${ICONE_GRIP}</div>
+          </div>
+          <div class="cat-itens ${aberta ? 'open' : ''}" data-cat="${escapeHtml(cat)}">
+            ${itensHtml}
+            <button class="btn-cat-add-item-full" onclick="abrirModalPrompt('Novo item em ${escJs(cat)}', '', 'Nome do item', (nome) => adicionarItemCatalogo('${escJs(cat)}', nome))">+ Item</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  let promptCallback = null;
+
+  function abrirModalPrompt(titulo, valorAtual, placeholder, callback) {
+    document.getElementById('modalPromptTitulo').textContent = titulo;
+    const input = document.getElementById('modalPromptInput');
+    input.value = valorAtual || '';
+    input.placeholder = placeholder || '';
+    promptCallback = callback;
+    document.getElementById('modalPrompt').classList.add('open');
+    setTimeout(() => input.focus(), 50);
+  }
+
+  function fecharModalPrompt() {
+    document.getElementById('modalPrompt').classList.remove('open');
+    promptCallback = null;
+  }
+
+  function confirmarModalPrompt() {
+    const valor = document.getElementById('modalPromptInput').value.trim();
+    if (!valor) {
+      mostrarAlerta('Digite um valor.');
+      return;
+    }
+    const cb = promptCallback;
+    fecharModalPrompt();
+    if (cb) cb(valor);
+  }
+
+  const STORAGE_KEY_LOCAIS = 'lista-de-compras-locais';
+  const STORAGE_KEY_ESTOQUE = 'lista-de-compras-estoque';
+  const STORAGE_KEY_LOCAL_PADRAO = 'lista-de-compras-local-padrao';
+  const STORAGE_KEY_SUGERIR_REPOSICAO = 'lista-de-compras-sugerir-reposicao';
+
+  let locais = JSON.parse(localStorage.getItem(STORAGE_KEY_LOCAIS) || '[]');
+  let estoque = JSON.parse(localStorage.getItem(STORAGE_KEY_ESTOQUE) || '[]');
+  let localPadraoItem = JSON.parse(localStorage.getItem(STORAGE_KEY_LOCAL_PADRAO) || '{}');
+  let sugerirReposicao = JSON.parse(localStorage.getItem(STORAGE_KEY_SUGERIR_REPOSICAO) || 'false');
+
+  function salvarLocais() {
+    localStorage.setItem(STORAGE_KEY_LOCAIS, JSON.stringify(locais));
+  }
+
+  function salvarEstoque() {
+    localStorage.setItem(STORAGE_KEY_ESTOQUE, JSON.stringify(estoque));
+    atualizarAlertaEstoqueBaixo();
+  }
+
+  function salvarLocalPadrao() {
+    localStorage.setItem(STORAGE_KEY_LOCAL_PADRAO, JSON.stringify(localPadraoItem));
+  }
+
+  function salvarSugerirReposicao() {
+    localStorage.setItem(STORAGE_KEY_SUGERIR_REPOSICAO, JSON.stringify(sugerirReposicao));
+  }
+
+  function criarLocal(nome) {
+    if (locais.some(l => l.toLowerCase() === nome.toLowerCase())) {
+      mostrarAlerta('Já existe um local com esse nome.');
+      return;
+    }
+    locais.push(nome);
+    salvarLocais();
+    renderEstoque();
+  }
+
+  function renomearLocal(nomeAtual, novoNome) {
+    if (novoNome === nomeAtual) return;
+    if (locais.some(l => l.toLowerCase() === novoNome.toLowerCase())) {
+      mostrarAlerta('Já existe um local com esse nome.');
+      return;
+    }
+    const idx = locais.indexOf(nomeAtual);
+    locais[idx] = novoNome;
+    estoque.forEach(e => { if (e.local === nomeAtual) e.local = novoNome; });
+    Object.keys(localPadraoItem).forEach(k => {
+      if (localPadraoItem[k] === nomeAtual) localPadraoItem[k] = novoNome;
+    });
+    salvarLocais();
+    salvarEstoque();
+    salvarLocalPadrao();
+    renderEstoque();
+  }
+
+  function excluirLocal(nome) {
+    const itensNoLocal = estoque.filter(e => e.local === nome);
+    const aviso = itensNoLocal.length
+      ? `Excluir o local "${nome}"? ${itensNoLocal.length} ${itensNoLocal.length === 1 ? 'item cadastrado nele será removido' : 'itens cadastrados nele serão removidos'} do estoque.`
+      : `Excluir o local "${nome}"?`;
+    mostrarConfirmacao(aviso, () => {
+      locais = locais.filter(l => l !== nome);
+      estoque = estoque.filter(e => e.local !== nome);
+      salvarLocais();
+      salvarEstoque();
+      renderEstoque();
+    });
+  }
+
+  function adicionarItemEstoque(nome, local, qtd) {
+    const existente = estoque.find(e => e.nome.toLowerCase() === nome.toLowerCase() && e.local === local);
+    if (existente) {
+      existente.qtd += qtd;
+    } else {
+      estoque.push({ nome, local, qtd, minimo: null });
+    }
+    localPadraoItem[nome.toLowerCase()] = local;
+    salvarEstoque();
+    salvarLocalPadrao();
+    renderEstoque();
+  }
+
+  function definirMinimoEstoque(nome, local, valorTexto) {
+    const item = estoque.find(e => e.nome === nome && e.local === local);
+    if (!item) return;
+    const valor = parseFloat(String(valorTexto).replace(',', '.'));
+    item.minimo = isNaN(valor) || valor < 0 ? null : valor;
+    salvarEstoque();
+    renderEstoque();
+  }
+
+  function existemItensBaixoEstoque() {
+    return estoque.some(e => e.minimo !== null && e.minimo !== undefined && e.qtd <= e.minimo);
+  }
+
+  function atualizarAlertaEstoqueBaixo() {
+    const baixo = existemItensBaixoEstoque();
+    document.getElementById('navBtnEstoque').classList.toggle('tem-estoque-baixo', baixo);
+    document.getElementById('navBtnEstoqueBaixo').style.display = baixo ? '' : 'none';
+  }
+
+  function ajustarQtdEstoque(nome, local, delta) {
+    const item = estoque.find(e => e.nome === nome && e.local === local);
+    if (!item) return;
+    item.qtd = Math.max(0, item.qtd + delta);
+    salvarEstoque();
+    renderEstoque();
+    if (item.qtd === 0 && delta < 0 && sugerirReposicao) {
+      mostrarConfirmacao(`"${nome}" acabou no estoque. Deseja adicionar à lista de compras?`, () => {
+        const lst = listaAtual();
+        if (lst && !lst.itens.some(i => i.nome.toLowerCase() === nome.toLowerCase())) {
+          lst.itens.push({ id: Date.now(), nome, qtd: 1, espec: '', preco: null, comprado: false, transferido: false });
+          salvar();
+        }
+      });
+    }
+  }
+
+  function excluirItemEstoque(nome, local) {
+    mostrarConfirmacao(`Remover "${nome}" do estoque em "${local}"?`, () => {
+      estoque = estoque.filter(e => !(e.nome === nome && e.local === local));
+      salvarEstoque();
+      renderEstoque();
+    });
+  }
+
+  let locaisExpandidos = new Set();
+  let modoAtualizacaoEstoque = false;
+  let filtroEstoqueBaixo = false;
+
+  let itemParaAdicionarLista = null;
+
+  function adicionarItemEstoqueALista(nome, local) {
+    if (listas.length === 0) {
+      mostrarAlerta('Crie uma lista de compras primeiro.');
+      return;
+    }
+    itemParaAdicionarLista = nome;
+    const select = document.getElementById('selectEscolherListaDestino');
+    select.innerHTML = listas.map(l => `<option value="${l.id}">${escapeHtml(l.nome)}</option>`).join('');
+    if (listaAtualId !== null) select.value = String(listaAtualId);
+
+    const entrada = estoque.find(e => e.nome === nome && e.local === local);
+    let qtdSugerida = 1;
+    if (entrada && entrada.minimo !== null && entrada.minimo !== undefined && entrada.minimo > entrada.qtd) {
+      qtdSugerida = entrada.minimo - entrada.qtd;
+    }
+    document.getElementById('inputQtdListaDestino').value = qtdSugerida;
+
+    document.getElementById('modalEscolherListaDestinoTitulo').textContent = `Adicionar "${nome}" em qual lista?`;
+    document.getElementById('modalEscolherListaDestino').classList.add('open');
+  }
+
+  function fecharModalEscolherListaDestino() {
+    document.getElementById('modalEscolherListaDestino').classList.remove('open');
+    itemParaAdicionarLista = null;
+  }
+
+  function confirmarModalEscolherListaDestino() {
+    const listaId = Number(document.getElementById('selectEscolherListaDestino').value);
+    const qtd = parseFloat(document.getElementById('inputQtdListaDestino').value) || 1;
+    const nome = itemParaAdicionarLista;
+    const lst = listas.find(l => l.id === listaId);
+    fecharModalEscolherListaDestino();
+    if (!lst || !nome) return;
+    if (lst.itens.some(i => i.nome.toLowerCase() === nome.toLowerCase())) {
+      mostrarAlerta(`Esse item já está na lista "${lst.nome}".`);
+      return;
+    }
+    lst.itens.push({ id: Date.now(), nome, qtd, espec: '', preco: null, comprado: false, transferido: false });
+    salvar();
+    mostrarAlerta(`"${nome}" adicionado à lista "${lst.nome}".`);
+  }
+
+  function toggleLocal(nome) {
+    if (locaisExpandidos.has(nome)) locaisExpandidos.delete(nome);
+    else locaisExpandidos.add(nome);
+    renderEstoque();
+  }
+
+  function toggleModoAtualizacaoEstoque() {
+    modoAtualizacaoEstoque = !modoAtualizacaoEstoque;
+    const btn = document.getElementById('btnAtualizarEstoque');
+    btn.textContent = modoAtualizacaoEstoque ? 'Concluir atualização' : 'Atualizar Estoque';
+    btn.classList.toggle('active', modoAtualizacaoEstoque);
+    renderEstoque();
+  }
+
+  function renderEstoque() {
+    const container = document.getElementById('locaisManager');
+    if (!container) return;
+
+    if (filtroEstoqueBaixo) {
+      const itensBaixo = estoque.filter(e => e.minimo !== null && e.minimo !== undefined && e.qtd <= e.minimo);
+      const listaHtml = itensBaixo.length
+        ? itensBaixo.map(e => `
+            <div class="list-card baixo-estoque">
+              <div class="list-card-body">
+                <div class="list-card-name">${escapeHtml(e.nome)}</div>
+                <div class="list-card-meta">
+                  <span>${escapeHtml(e.local)}</span>
+                  <span>Qtd: ${e.qtd} · Mín: ${e.minimo}</span>
+                </div>
+              </div>
+              <button class="list-card-action" onclick="adicionarItemEstoqueALista('${escJs(e.nome)}', '${escJs(e.local)}')" aria-label="Adicionar à lista de compras">
+                <svg viewBox="0 0 24 24"><path d="M11 4h2v7h7v2h-7v7h-2v-7H4v-2h7z"/></svg>
+              </button>
+            </div>
+          `).join('')
+        : '<div class="empty-lists">Nenhum item em baixa no momento.</div>';
+
+      container.innerHTML = `
+        <div class="config-label-row">
+          <div class="config-label">Itens em baixa</div>
+          <button class="btn-cat-add" onclick="mostrarEstoque()">Ver tudo</button>
+        </div>
+        ${listaHtml}
+      `;
+      return;
+    }
+
+    if (locais.length === 0) {
+      container.innerHTML = '<div class="empty-lists">Nenhum local cadastrado. Toque em "+ Local" para criar o primeiro.</div>';
+      return;
+    }
+    container.innerHTML = locais.map(local => {
+      const itensDoLocal = estoque.filter(e => e.local === local);
+      const aberta = locaisExpandidos.has(local);
+      const metaTxt = itensDoLocal.length === 0 ? 'Sem itens' : `${itensDoLocal.length} ${itensDoLocal.length === 1 ? 'item' : 'itens'}`;
+
+      const itensHtml = itensDoLocal.length
+        ? itensDoLocal.map(e => {
+            const baixo = e.minimo !== null && e.minimo !== undefined && e.qtd <= e.minimo;
+            const minTxt = e.minimo !== null && e.minimo !== undefined ? `Mín: ${e.minimo}` : 'Definir mínimo';
+            return `
+            <div class="list-card ${baixo ? 'baixo-estoque' : ''}" data-drag-id="${escapeHtml(e.nome)}">
+              <div class="list-card-body">
+                <div class="list-card-name">${escapeHtml(e.nome)}</div>
+                <div class="list-card-meta">
+                  <span>Qtd: ${e.qtd}</span>
+                  <span class="item-qtd" onclick="abrirModalPrompt('Quantidade mínima de \\'${escJs(e.nome)}\\'', ${e.minimo !== null && e.minimo !== undefined ? e.minimo : "''"}, 'Quantidade mínima', (valor) => definirMinimoEstoque('${escJs(e.nome)}', '${escJs(local)}', valor))">${minTxt}</span>
+                </div>
+              </div>
+              ${modoAtualizacaoEstoque ? `
+                <button class="list-card-action qty-btn" onclick="ajustarQtdEstoque('${escJs(e.nome)}', '${escJs(local)}', -1)" aria-label="Diminuir">−</button>
+                <button class="list-card-action qty-btn" onclick="ajustarQtdEstoque('${escJs(e.nome)}', '${escJs(local)}', 1)" aria-label="Aumentar">+</button>
+                <button class="list-card-action danger" onclick="excluirItemEstoque('${escJs(e.nome)}', '${escJs(local)}')" aria-label="Remover">
+                  <img src="icons/ui/lixo.png" alt="">
+                </button>
+              ` : ''}
+              <div class="drag-handle drag-handle-estoqueitem" aria-label="Arrastar para reordenar">${ICONE_GRIP}</div>
+            </div>
+          `;
+          }).join('')
+        : '<div class="cat-empty">Sem itens</div>';
+
+      return `
+        <div class="cat-group" data-drag-id="${escapeHtml(local)}">
+          <div class="list-card">
+            <button class="list-card-body" onclick="toggleLocal('${escJs(local)}')">
+              <div class="list-card-name">${escapeHtml(local)}</div>
+              <div class="list-card-meta">${metaTxt} ${aberta ? '▴' : '▾'}</div>
+            </button>
+            <button class="list-card-action" onclick="abrirModalPrompt('Renomear local', '${escJs(local)}', 'Nome do local', (novoNome) => renomearLocal('${escJs(local)}', novoNome))" aria-label="Editar local">${ICONE_LAPIS}</button>
+            <button class="list-card-action danger" onclick="excluirLocal('${escJs(local)}')" aria-label="Excluir local">
+              <img src="icons/ui/lixo.png" alt="">
+            </button>
+            <div class="drag-handle drag-handle-local" aria-label="Arrastar para reordenar">${ICONE_GRIP}</div>
+          </div>
+          <div class="cat-itens ${aberta ? 'open' : ''}" data-local="${escapeHtml(local)}">
+            ${itensHtml}
+            <button class="btn-cat-add-item-full" onclick="abrirModalEstoqueItem('${escJs(local)}')">+ Item</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  let localEmEdicaoEstoque = null;
+
+  function abrirModalEstoqueItem(local) {
+    localEmEdicaoEstoque = local;
+    document.getElementById('modalEstoqueItemTitulo').textContent = `Adicionar item em "${local}"`;
+    document.getElementById('inputEstoqueItemNome').value = '';
+    document.getElementById('inputEstoqueItemQtd').value = '1';
+    document.getElementById('modalEstoqueItem').classList.add('open');
+    setTimeout(() => document.getElementById('inputEstoqueItemNome').focus(), 50);
+  }
+
+  function fecharModalEstoqueItem() {
+    document.getElementById('modalEstoqueItem').classList.remove('open');
+    fecharDropdownEstoqueItens();
+    localEmEdicaoEstoque = null;
+  }
+
+  function confirmarModalEstoqueItem() {
+    const nome = document.getElementById('inputEstoqueItemNome').value.trim();
+    const qtd = parseFloat(document.getElementById('inputEstoqueItemQtd').value) || 1;
+    if (!nome) {
+      mostrarAlerta('Digite o nome do item.');
+      return;
+    }
+    registrarItemNoCatalogo(nome);
+    adicionarItemEstoque(nome, localEmEdicaoEstoque, qtd);
+    fecharModalEstoqueItem();
+  }
+
+  function filtrarDropdownEstoqueItens() {
+    const termo = document.getElementById('inputEstoqueItemNome').value.trim().toLowerCase();
+    const nomes = listaCatalogoOrdenada().filter(n => !termo || n.toLowerCase().includes(termo));
+    const dropdown = document.getElementById('dropdownEstoqueItens');
+    dropdown.innerHTML = nomes.length
+      ? nomes.map(n => `<div class="combo-option" onmousedown="event.preventDefault(); selecionarItemDropdownEstoque('${n.replace(/'/g, "\\'")}')">${escapeHtml(n)}</div>`).join('')
+      : `<div class="combo-empty">Nenhum produto encontrado — pode digitar um novo</div>`;
+  }
+
+  function abrirDropdownEstoqueItens() {
+    filtrarDropdownEstoqueItens();
+    document.getElementById('dropdownEstoqueItens').classList.add('open');
+  }
+
+  function fecharDropdownEstoqueItens() {
+    document.getElementById('dropdownEstoqueItens').classList.remove('open');
+  }
+
+  function selecionarItemDropdownEstoque(nome) {
+    document.getElementById('inputEstoqueItemNome').value = nome;
+    fecharDropdownEstoqueItens();
+    document.getElementById('inputEstoqueItemQtd').focus();
+  }
+
+  let callbackEscolherLocal = null;
+  let nomeItemEscolherLocal = null;
+
+  function abrirModalEscolherLocal(nomeItem, callback) {
+    nomeItemEscolherLocal = nomeItem;
+    document.getElementById('modalEscolherLocalTitulo').textContent = `Onde guardar "${nomeItem}"?`;
+    const select = document.getElementById('selectEscolherLocal');
+    select.innerHTML = locais.map(l => `<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('')
+      + '<option value="__novo__">+ Criar novo local…</option>';
+    callbackEscolherLocal = callback;
+    document.getElementById('modalEscolherLocal').classList.add('open');
+  }
+
+  function aoMudarSelectEscolherLocal() {
+    const select = document.getElementById('selectEscolherLocal');
+    if (select.value !== '__novo__') return;
+    const nomeItem = nomeItemEscolherLocal;
+    const cb = callbackEscolherLocal;
+    callbackEscolherLocal = null;
+    document.getElementById('modalEscolherLocal').classList.remove('open');
+    salvar();
+    renderizar();
+    abrirModalPrompt('Novo local', '', 'Nome do local (ex: Armário da cozinha)', (nome) => {
+      const existente = locais.find(l => l.toLowerCase() === nome.toLowerCase());
+      if (!existente) {
+        locais.push(nome);
+        salvarLocais();
+        renderEstoque();
+      }
+      abrirModalEscolherLocal(nomeItem, cb);
+      document.getElementById('selectEscolherLocal').value = existente || nome;
+    });
+  }
+
+  function fecharModalEscolherLocal() {
+    document.getElementById('modalEscolherLocal').classList.remove('open');
+    callbackEscolherLocal = null;
+    salvar();
+    renderizar();
+  }
+
+  function confirmarModalEscolherLocal() {
+    const local = document.getElementById('selectEscolherLocal').value;
+    const cb = callbackEscolherLocal;
+    fecharModalEscolherLocal();
+    if (cb) cb(local);
+  }
+
+  function adicionarListaAoEstoque() {
+    if (locais.length === 0) {
+      abrirModalPrompt('Cadastre o primeiro local do estoque', '', 'Nome do local (ex: Armário da cozinha)', (nome) => {
+        criarLocal(nome);
+        adicionarListaAoEstoque();
+      });
+      return;
+    }
+    const lst = listaAtual();
+    const pendentes = lst.itens.filter(i => !i.transferido);
+    if (pendentes.length === 0) {
+      mostrarAlerta('Não há itens pendentes para adicionar ao estoque.');
+      return;
+    }
+    processarTransferenciaEstoque(pendentes, 0);
+  }
+
+  function processarTransferenciaEstoque(itensPendentes, idx) {
+    if (idx >= itensPendentes.length) {
+      salvar();
+      renderizar();
+      mostrarAlerta('Itens adicionados ao estoque!');
+      return;
+    }
+    const item = itensPendentes[idx];
+    const localSalvo = localPadraoItem[item.nome.toLowerCase()];
+    if (localSalvo && locais.includes(localSalvo)) {
+      adicionarItemEstoque(item.nome, localSalvo, item.qtd || 1);
+      item.transferido = true;
+      processarTransferenciaEstoque(itensPendentes, idx + 1);
+    } else {
+      abrirModalEscolherLocal(item.nome, (local) => {
+        adicionarItemEstoque(item.nome, local, item.qtd || 1);
+        item.transferido = true;
+        processarTransferenciaEstoque(itensPendentes, idx + 1);
+      });
+    }
   }
 
   let listas = JSON.parse(localStorage.getItem(STORAGE_KEY_LISTAS) || 'null');
@@ -1084,27 +2075,54 @@
 
   function atualizarNavAtiva(aba) {
     document.getElementById('navBtnListas').classList.toggle('active', aba === 'listas');
+    document.getElementById('navBtnEstoque').classList.toggle('active', aba === 'estoque');
     document.getElementById('navBtnConfig').classList.toggle('active', aba === 'config');
   }
 
   function mostrarListas() {
     document.getElementById('viewListas').style.display = '';
     document.getElementById('viewLista').style.display = 'none';
+    document.getElementById('viewEstoque').style.display = 'none';
     document.getElementById('viewConfig').style.display = 'none';
     document.getElementById('footerTotal').style.display = 'none';
     atualizarNavAtiva('listas');
     renderListasGrid();
   }
 
+  function mostrarEstoque() {
+    document.getElementById('viewListas').style.display = 'none';
+    document.getElementById('viewLista').style.display = 'none';
+    document.getElementById('viewEstoque').style.display = '';
+    document.getElementById('viewConfig').style.display = 'none';
+    document.getElementById('footerTotal').style.display = 'none';
+    atualizarNavAtiva('estoque');
+    modoAtualizacaoEstoque = false;
+    filtroEstoqueBaixo = false;
+    const btnAtualizar = document.getElementById('btnAtualizarEstoque');
+    btnAtualizar.textContent = 'Atualizar Estoque';
+    btnAtualizar.classList.remove('active');
+    renderEstoque();
+  }
+
+  function mostrarEstoqueBaixo() {
+    mostrarEstoque();
+    filtroEstoqueBaixo = true;
+    renderEstoque();
+  }
+
   function mostrarConfig() {
     document.getElementById('viewListas').style.display = 'none';
     document.getElementById('viewLista').style.display = 'none';
+    document.getElementById('viewEstoque').style.display = 'none';
     document.getElementById('viewConfig').style.display = '';
     document.getElementById('footerTotal').style.display = 'none';
     atualizarNavAtiva('config');
     renderTemaButtons();
     renderColorSwatches();
     renderFontSizeButtons();
+    document.getElementById('checkSugerirReposicao').checked = sugerirReposicao;
+    document.getElementById('itensCadastradosCard').classList.remove('expanded');
+    renderGerenciarItens();
     exibirVersaoApp();
   }
 
@@ -1113,11 +2131,26 @@
     salvar();
     document.getElementById('viewListas').style.display = 'none';
     document.getElementById('viewLista').style.display = '';
+    document.getElementById('viewEstoque').style.display = 'none';
     document.getElementById('viewConfig').style.display = 'none';
     document.getElementById('footerTotal').style.display = '';
     atualizarNavAtiva('listas');
     document.getElementById('listaTitulo').textContent = listaAtual().nome;
+    document.getElementById('formCard').classList.remove('expanded');
+    document.getElementById('inputBuscaItem').value = '';
+    fecharMenuLista();
     renderizar();
+  }
+
+  function toggleFormCard() {
+    const card = document.getElementById('formCard');
+    const expandindo = !card.classList.contains('expanded');
+    card.classList.toggle('expanded', expandindo);
+    if (expandindo) document.getElementById('inputItem').focus();
+  }
+
+  function toggleItensCadastrados() {
+    document.getElementById('itensCadastradosCard').classList.toggle('expanded');
   }
 
   function voltarParaListas() {
@@ -1126,15 +2159,36 @@
 
   function renderListasGrid() {
     const grid = document.getElementById('listsGrid');
+
+    document.querySelectorAll('#sortOptionsListas .btn-font-size').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.ordem === ordemListas);
+    });
+
     if (listas.length === 0) {
       grid.innerHTML = '<div class="empty-lists">Você ainda não tem nenhuma lista. Toque em "+ Nova lista" para criar a primeira.</div>';
       return;
     }
-    grid.innerHTML = listas.map(l => {
+
+    const manual = ordemListas === 'manual';
+    let listasOrdenadas;
+    if (manual) {
+      listasOrdenadas = listas;
+    } else if (ordemListas === 'antiga') {
+      listasOrdenadas = [...listas].sort((a, b) => a.id - b.id);
+    } else if (ordemListas === 'az') {
+      listasOrdenadas = [...listas].sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    } else {
+      listasOrdenadas = [...listas].sort((a, b) => b.id - a.id);
+    }
+
+    grid.innerHTML = listasOrdenadas.map((l, idx) => {
       const { qtdItens, total } = resumoLista(l);
       const metaTxt = qtdItens === 0 ? 'Sem itens' : `${qtdItens} ${qtdItens === 1 ? 'item' : 'itens'} · ${formatarMoeda(total)}`;
+      const reorderHtml = manual
+        ? `<div class="drag-handle drag-handle-lista" aria-label="Arrastar para reordenar">${ICONE_GRIP}</div>`
+        : '';
       return `
-        <div class="list-card">
+        <div class="list-card" data-drag-id="${l.id}">
           <button class="list-card-body" onclick="abrirLista(${l.id})">
             <div class="list-card-name">${escapeHtml(l.nome)}</div>
             <div class="list-card-meta">${metaTxt}</div>
@@ -1145,6 +2199,7 @@
           <button class="list-card-action danger" onclick="pedirExclusaoLista(${l.id})" aria-label="Excluir lista">
             <img src="icons/ui/lixo.png" alt="">
           </button>
+          ${reorderHtml}
         </div>
       `;
     }).join('');
@@ -1220,10 +2275,17 @@
       return;
     }
 
+    const jaNaLista = listaAtual().itens.some(i => i.nome.toLowerCase() === nome.toLowerCase());
+    if (jaNaLista) {
+      mostrarAlerta('Esse item já está na lista.');
+      return;
+    }
+
     listaAtual().itens.push({
       id: Date.now(),
       nome, qtd, espec, preco,
-      comprado: false
+      comprado: false,
+      transferido: false
     });
 
     registrarItemNoCatalogo(nome);
@@ -1426,35 +2488,51 @@
       return;
     }
 
-    lista.innerHTML = lst.itens.map(item => {
+    lst.itens.forEach(item => {
       const temPreco = item.preco !== null && item.preco !== undefined;
       const subtotal = temPreco ? item.qtd * item.preco : 0;
       total += subtotal;
       if (item.comprado) gasto += subtotal;
-      const metaParts = [];
-      if (item.qtd) metaParts.push(`<span class="item-qtd" onclick="editarQtd(${item.id})">Qtd: ${item.qtd}</span>`);
-      metaParts.push(item.espec
-        ? `<span class="item-espec" onclick="editarEspec(${item.id})">${escapeHtml(item.espec)}</span>`
-        : `<span class="item-espec item-espec-empty" onclick="editarEspec(${item.id})">+ Especificação</span>`);
+    });
 
-      const precoHtml = temPreco
-        ? `<div class="item-price" onclick="editarPreco(${item.id})">${formatarMoeda(subtotal)}</div>`
-        : `<div class="item-price item-price-empty" onclick="editarPreco(${item.id})">+ Adicionar preço</div>`;
+    const termoBusca = document.getElementById('inputBuscaItem').value.trim().toLowerCase();
+    const itensExibidos = termoBusca
+      ? lst.itens.filter(item => item.nome.toLowerCase().includes(termoBusca) || (item.espec && item.espec.toLowerCase().includes(termoBusca)))
+      : lst.itens;
 
-      return `
-        <div class="item ${item.comprado ? 'bought' : ''}">
-          <input type="checkbox" ${item.comprado ? 'checked' : ''} onchange="toggleComprado(${item.id})">
-          <div class="item-info">
-            <div class="item-name">${escapeHtml(item.nome)}</div>
-            <div class="item-meta">${metaParts.join('')}</div>
-            ${precoHtml}
+    if (itensExibidos.length === 0) {
+      lista.innerHTML = '<div class="empty-search">Nenhum item encontrado</div>';
+    } else {
+      lista.innerHTML = itensExibidos.map(item => {
+        const temPreco = item.preco !== null && item.preco !== undefined;
+        const subtotal = temPreco ? item.qtd * item.preco : 0;
+        const metaParts = [];
+        if (item.qtd) metaParts.push(`<span class="item-qtd" onclick="editarQtd(${item.id})">Qtd: ${item.qtd}</span>`);
+        if (item.transferido) metaParts.push('<span class="item-transferido">No estoque</span>');
+        metaParts.push(item.espec
+          ? `<span class="item-espec" onclick="editarEspec(${item.id})">${escapeHtml(item.espec)}</span>`
+          : `<span class="item-espec item-espec-empty" onclick="editarEspec(${item.id})">+ Especificação</span>`);
+
+        const precoHtml = temPreco
+          ? `<div class="item-price" onclick="editarPreco(${item.id})">${formatarMoeda(subtotal)}</div>`
+          : `<div class="item-price item-price-empty" onclick="editarPreco(${item.id})">+ Adicionar preço</div>`;
+
+        return `
+          <div class="item ${item.comprado ? 'bought' : ''}" data-drag-id="${item.id}">
+            <input type="checkbox" ${item.comprado ? 'checked' : ''} onchange="toggleComprado(${item.id})">
+            <div class="item-info">
+              <div class="item-name">${escapeHtml(item.nome)}</div>
+              <div class="item-meta">${metaParts.join('')}</div>
+              ${precoHtml}
+            </div>
+            <button class="btn-del" onclick="removerItem(${item.id})"><img src="icons/ui/fechar.png" alt="remover"></button>
+            ${termoBusca ? '' : `<div class="drag-handle drag-handle-item" aria-label="Arrastar para reordenar">${ICONE_GRIP}</div>`}
           </div>
-          <button class="btn-del" onclick="removerItem(${item.id})"><img src="icons/ui/fechar.png" alt="remover"></button>
-        </div>
-      `;
-    }).join('');
+        `;
+      }).join('');
+    }
 
-    document.getElementById('totalGeral').textContent = formatarMoeda(total);
+    document.getElementById('totalGeral').textContent = formatarMoeda(gasto);
     renderizarOrcamento(lst, gasto);
   }
 
@@ -1465,11 +2543,11 @@
   }
 
   function popularDatalists() {
-    // catálogo mantido em memória; o dropdown lê ITENS_PADRAO/itensExtra diretamente
+    // catálogo mantido em memória; o dropdown lê `catalogo` diretamente
   }
 
   function listaCatalogoOrdenada() {
-    return [...ITENS_PADRAO, ...itensExtra].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+    return Object.values(catalogo).flat().sort((a, b) => a.localeCompare(b, 'pt-BR'));
   }
 
   function filtrarDropdownItens() {
@@ -1499,12 +2577,73 @@
 
   document.addEventListener('click', (event) => {
     const wrap = event.target.closest('.combo-wrap');
-    if (!wrap) fecharDropdownItens();
+    if (!wrap) {
+      fecharDropdownItens();
+      fecharDropdownEstoqueItens();
+    }
+    const kebab = event.target.closest('.kebab-wrap');
+    if (!kebab) fecharMenuLista();
+  });
+
+  function toggleMenuLista(event) {
+    event.stopPropagation();
+    document.getElementById('menuLista').classList.toggle('open');
+  }
+
+  function fecharMenuLista() {
+    document.getElementById('menuLista').classList.remove('open');
+  }
+
+  ativarDragReorder('drag-handle-lista', '.list-card', '#listsGrid', (scopeEl, ids) => {
+    const idsNum = ids.map(Number);
+    listas = idsNum.map(id => listas.find(l => l.id === id)).filter(Boolean);
+    salvar();
+  });
+
+  ativarDragReorder('drag-handle-item', '.item', '#listaItens', (scopeEl, ids) => {
+    const idsNum = ids.map(Number);
+    const lst = listaAtual();
+    lst.itens = idsNum.map(id => lst.itens.find(i => i.id === id)).filter(Boolean);
+    salvar();
+  });
+
+  ativarDragReorder('drag-handle-categoria', '.cat-group', '#catalogoManager', (scopeEl, ids) => {
+    const novoCatalogo = {};
+    ids.forEach(cat => { novoCatalogo[cat] = catalogo[cat]; });
+    Object.keys(catalogo).forEach(cat => { if (!(cat in novoCatalogo)) novoCatalogo[cat] = catalogo[cat]; });
+    catalogo = novoCatalogo;
+    salvarCatalogo();
+  });
+
+  ativarDragReorder('drag-handle-catitem', '.list-card', '.cat-itens', (scopeEl, ids) => {
+    const cat = scopeEl.dataset.cat;
+    if (!cat || !catalogo[cat]) return;
+    catalogo[cat] = ids.map(nome => catalogo[cat].find(n => n === nome)).filter(Boolean);
+    salvarCatalogo();
+  });
+
+  ativarDragReorder('drag-handle-local', '.cat-group', '#locaisManager', (scopeEl, ids) => {
+    locais = ids.map(nome => locais.find(l => l === nome)).filter(Boolean);
+    salvarLocais();
+  });
+
+  ativarDragReorder('drag-handle-estoqueitem', '.list-card', '.cat-itens', (scopeEl, ids) => {
+    const local = scopeEl.dataset.local;
+    if (!local) return;
+    const idxInicio = estoque.findIndex(e => e.local === local);
+    if (idxInicio === -1) return;
+    const doLocal = estoque.filter(e => e.local === local);
+    const outros = estoque.filter(e => e.local !== local);
+    const reordenado = ids.map(nome => doLocal.find(e => e.nome === nome)).filter(Boolean);
+    outros.splice(idxInicio, 0, ...reordenado);
+    estoque = outros;
+    salvarEstoque();
   });
 
   popularDatalists();
   aplicarCorSistema(corSistemaAtual, false);
   definirTamanhoFonte(tamanhoFonteAtual, false);
+  atualizarAlertaEstoqueBaixo();
   mostrarListas();
 
   function marcarAtualizacaoDisponivel() {
